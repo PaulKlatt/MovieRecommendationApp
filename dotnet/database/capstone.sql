@@ -24,6 +24,15 @@ CREATE TABLE users (
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 )
 
+CREATE TABLE accounts (
+	account_id int IDENTITY(1,1) NOT NULL,
+	favorite_genres varchar(50) NOT NULL,
+	profile_name varchar(50) NOT NULL,
+	user_id int NOT NULL
+	CONSTRAINT PK_accounts PRIMARY KEY (account_id),
+	CONSTRAINT FK_accounts_users FOREIGN KEY (user_id) references users (user_id)
+)
+
 --populate default data
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg45HuwT7PZkfuKTz6IB90CtWY4=','LHxP4Xh7bN0=','user');
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('admin','YhyGVQ+Ch69n4JMBncM4lNF/i9s=', 'Ar/aB2thQTI=','admin');
