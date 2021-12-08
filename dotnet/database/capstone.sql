@@ -20,9 +20,24 @@ CREATE TABLE users (
 	username varchar(50) NOT NULL,
 	password_hash varchar(200) NOT NULL,
 	salt varchar(200) NOT NULL,
-	user_role varchar(50) NOT NULL
+	user_role varchar(50) NOT NULL,
+
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 )
+
+CREATE TABLE genres (
+	genre_id int IDENTITY(1, 1) NOT NULL,
+	genre_name varchar(50) NOT NULL
+	CONSTRAINT PK_genres PRIMARY KEY (genre_id)
+)
+
+CREATE TABLE [genres_users] (
+	genre_id int NOT NULL,
+	user_id int NOT NULL,
+	CONSTRAINT [PK_genres_users] PRIMARY KEY (genre_id, user_id),
+	CONSTRAINT [FK_genres_users_genres] FOREIGN KEY (genre_id) references genres (genre_id),
+	CONSTRAINT [FK_genres_users_users] FOREIGN KEY (user_id) references users (user_id)
+);
 
 --populate default data
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg45HuwT7PZkfuKTz6IB90CtWY4=','LHxP4Xh7bN0=','user');

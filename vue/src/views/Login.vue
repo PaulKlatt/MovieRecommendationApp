@@ -1,4 +1,9 @@
 <template>
+  <div class='homepage'>
+    <div class="description">
+      <h1 class="title">The Superior Movie Recommendation App</h1>
+      <p>Have you ever been at home, staring at the netflix screen, unsure of what to watch? Well worry no more!  The Superior Movie Recommendation App has got you covered.</p>
+    </div>
   <div id="login" class="text-center">
     <form class="form-signin" @submit.prevent="login">
       <h1 class="h3 mb-3 font-weight-normal">Please Sign In</h1>
@@ -12,28 +17,41 @@
         role="alert"
         v-if="this.$route.query.registration"
       >Thank you for registering, please sign in.</div>
-      <label for="username" class="sr-only">Username</label>
-      <input
-        type="text"
-        id="username"
-        class="form-control"
-        placeholder="Username"
-        v-model="user.username"
-        required
-        autofocus
-      />
-      <label for="password" class="sr-only">Password</label>
-      <input
-        type="password"
-        id="password"
-        class="form-control"
-        placeholder="Password"
-        v-model="user.password"
-        required
-      />
+      <div>
+        <label for="username" class="sr-only">Username</label>
+        <input
+          type="text"
+          id="username"
+          class="form-control"
+          placeholder="Username"
+          v-model="user.username"
+          required
+          autofocus
+        />
+      </div>
+      <div>
+        <label for="password" class="sr-only">Password</label>
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          placeholder="Password"
+          v-model="user.password"
+          required
+        />
+      </div>
+      <div>
       <router-link :to="{ name: 'register' }">Need an account?</router-link>
+      </div>
+      <div>
       <button type="submit">Sign in</button>
+      </div>
     </form>
+    <div id="app-details">
+      <p>Browse random movies from a large, varied collection by your favorite genres! Save your favorite movies for later reference!</p>
+    </div>    
+  </div>
+  <img class = "bestcat" src="https://canary.contestimg.wish.com/api/webimage/5e1468224b7eec03c97f8915-large.jpg?cache_buster=085e00180f70ca62aa0f8a1c7d8e6bdb" />
   </div>
 </template>
 
@@ -74,3 +92,44 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+.description {
+  text-align: center;
+  grid-area: description;
+}
+
+#login {
+  grid-area: login;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-signin * {
+  margin: 10px 5px;
+}
+
+#app-details {
+  /* try to center this with login info? */
+  width:50%;
+  flex-wrap: wrap;
+}
+
+.homepage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 
+  "description description"
+   "login cat";
+}
+
+.bestcat {
+  grid-area: cat;
+}
+
+
+
+</style>

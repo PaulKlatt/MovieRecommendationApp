@@ -1,4 +1,6 @@
-﻿namespace Capstone.Models
+﻿using System.Collections.Generic;
+
+namespace Capstone.Models
 {
     public class User
     {
@@ -17,6 +19,7 @@
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Role { get; set; }
+        public List<string> FavoriteGenres { get; set; } = new List<string>();
     }
 
     /// <summary>

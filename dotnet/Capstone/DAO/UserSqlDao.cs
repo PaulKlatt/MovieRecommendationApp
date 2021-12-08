@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using Capstone.Models;
 using Capstone.Security;
@@ -70,6 +71,76 @@ namespace Capstone.DAO
             return GetUser(username);
         }
 
+        public ReturnUser GetReturnUser(int userId)
+        {
+            ReturnUser returnUser = null;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("SELECT users.user_Id, users.username, users.user_role " +
+                        "FROM users " +
+                        "WHERE users.user_Id = @user_Id ", conn);
+                    cmd.Parameters.AddWithValue("@user_Id", userId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        returnUser = GetReturnUserFromReader(reader);
+                    }
+                }
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd2 = new SqlCommand("SELECT genre_name " +
+                                                     "FROM users " +
+                                                     "JOIN genres_users ON users.user_id = genres_users.user_id " +
+                                                     "JOIN genres ON genres.genre_id = genres_users.genre_id " +
+                                                     "WHERE users.user_Id = @user_Id", conn);
+                    cmd2.Parameters.AddWithValue("@user_Id", userId);
+                    SqlDataReader reader2 = cmd2.ExecuteReader();
+
+                    while (reader2.Read())
+                    {
+                        returnUser.FavoriteGenres.Add(Convert.ToString(reader2["genre_name"]));
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return returnUser;
+        }
+
+       /* public ReturnUser Adduser(int userId, List<string> favoriteGenres, string profileName)
+        {
+            int newuserId;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("INSERT INTO users (users.userId, favoriteGenres) OUTPUT INSERTED.userId VALUES (@users.userId, @favoriteGenres, @profileName)", conn);
+                    cmd.Parameters.AddWithValue("@users.userId", userId);
+                    cmd.Parameters.AddWithValue("@favoriteGenres", favoriteGenres);
+                    cmd.Parameters.AddWithValue("@profileName", profileName);
+                    newuserId = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return Getuser(newuserId);
+        }
+       */
         private User GetUserFromReader(SqlDataReader reader)
         {
             User u = new User()
@@ -82,6 +153,18 @@ namespace Capstone.DAO
             };
 
             return u;
+        }
+
+        private ReturnUser GetReturnUserFromReader(SqlDataReader reader)
+        {
+            ReturnUser userFromReader = new ReturnUser()
+            {
+                UserId = Convert.ToInt32(reader["user_id"]),
+                Username = Convert.ToString(reader["username"]),
+                Role = Convert.ToString(reader["user_role"]),
+            };
+
+            return userFromReader;
         }
     }
 }
