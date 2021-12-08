@@ -20,16 +20,9 @@ CREATE TABLE users (
 	username varchar(50) NOT NULL,
 	password_hash varchar(200) NOT NULL,
 	salt varchar(200) NOT NULL,
-	user_role varchar(50) NOT NULL
-	CONSTRAINT PK_user PRIMARY KEY (user_id)
-)
+	user_role varchar(50) NOT NULL,
 
-CREATE TABLE accounts (
-	account_id int IDENTITY(1,1) NOT NULL,
-	profile_name varchar(50) NOT NULL,
-	user_id int NOT NULL
-	CONSTRAINT PK_accounts PRIMARY KEY (account_id),
-	CONSTRAINT FK_accounts_users FOREIGN KEY (user_id) references users (user_id)
+	CONSTRAINT PK_user PRIMARY KEY (user_id)
 )
 
 CREATE TABLE genres (
@@ -38,12 +31,12 @@ CREATE TABLE genres (
 	CONSTRAINT PK_genres PRIMARY KEY (genre_id)
 )
 
-CREATE TABLE [genres_accounts] (
+CREATE TABLE [genres_users] (
 	genre_id int NOT NULL,
-	account_id int NOT NULL,
-	CONSTRAINT [PK_genres_accounts] PRIMARY KEY (genre_id, account_id),
-	CONSTRAINT [FK_genres_accounts_genres] FOREIGN KEY (genre_id) references genres (genre_id),
-	CONSTRAINT [FK_genres_accounts_accounts] FOREIGN KEY (account_id) references accounts (account_id)
+	user_id int NOT NULL,
+	CONSTRAINT [PK_genres_users] PRIMARY KEY (genre_id, user_id),
+	CONSTRAINT [FK_genres_users_genres] FOREIGN KEY (genre_id) references genres (genre_id),
+	CONSTRAINT [FK_genres_users_users] FOREIGN KEY (user_id) references users (user_id)
 );
 
 --populate default data

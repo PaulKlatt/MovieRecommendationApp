@@ -14,33 +14,33 @@ namespace Capstone.Controllers
     [Route("[controller]")]
     [ApiController]
 
-    public class AccountsController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly ITokenGenerator tokenGenerator;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IAccountDao accountDao;
+        private readonly IUserDao userDao;
 
-        public AccountsController(ITokenGenerator _tokenGenerator, IPasswordHasher _passwordHasher, IAccountDao _accountDao)
+        public UsersController(ITokenGenerator _tokenGenerator, IPasswordHasher _passwordHasher, IUserDao _userDao)
         {
             tokenGenerator = _tokenGenerator;
             passwordHasher = _passwordHasher;
-            accountDao = _accountDao;
+            userDao = _userDao;
         }
 
-        [HttpGet("{accountId}")]
-        public ActionResult<Account> GetAccountById(int accountId)
+        [HttpGet("{userId}")]
+        public ActionResult<Account> GetAccountById(int userId)
         {
-            Account returnAccount = null;
+            ReturnUser returnUser = null;
 
-            returnAccount = accountDao.GetAccount(accountId);
+            returnUser = userDao.GetReturnUser(userId);
 
-            if (returnAccount == null)
+            if (returnUser == null)
             {
-                return NotFound("Account not found");
+                return NotFound("User not found");
             }
             else
             {
-                return Ok(returnAccount);
+                return Ok(returnUser);
             }
         }
     }

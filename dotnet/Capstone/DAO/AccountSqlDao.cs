@@ -7,6 +7,7 @@ using Capstone.Models;
 
 namespace Capstone.DAO
 {
+    /*
     public class AccountSqlDao : IAccountDao
     {
         private readonly string connectionString;
@@ -25,7 +26,7 @@ namespace Capstone.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT accounts.account_Id, accounts.user_Id, profile_Name " +
+                    SqlCommand cmd = new SqlCommand("SELECT users.user_Id, " +
                         "FROM accounts " +
                         "WHERE accounts.account_Id = @account_Id ", conn);
                     cmd.Parameters.AddWithValue("@account_Id", accountId);
@@ -40,11 +41,11 @@ namespace Capstone.DAO
                 {
                     conn.Open();
                     SqlCommand cmd2 = new SqlCommand("SELECT genre_name " +
-                                                     "FROM accounts " +
-                                                     "JOIN genres_accounts ON accounts.account_id = genres_accounts.account_id " +
-                                                     "JOIN genres ON genres.genre_id = genres_accounts.genre_id " +
-                                                     "WHERE accounts.account_Id = @account_Id", conn);
-                    cmd2.Parameters.AddWithValue("@account_Id", accountId);
+                                                     "FROM users " +
+                                                     "JOIN genres_users ON users.user_id = genres_users.user_id " +
+                                                     "JOIN genres ON genres.genre_id = genres_users.genre_id " +
+                                                     "WHERE users.user_Id = @user_Id", conn);
+                    cmd2.Parameters.AddWithValue("@user_Id", userId);
                     SqlDataReader reader2 = cmd2.ExecuteReader();
 
                     while (reader2.Read())
@@ -85,17 +86,16 @@ namespace Capstone.DAO
             return GetAccount(newAccountId);
         }
 
-        private Account GetAccountFromReader(SqlDataReader reader)
+        private ReturnUser GetReturnUserFromReader(SqlDataReader reader)
         {
-            Account accountFromReader = new Account()
+            ReturnUser userFromReader = new ReturnUser()
             {
-                AccountId = Convert.ToInt32(reader["account_id"]),
                 UserId = Convert.ToInt32(reader["user_id"]),
-                //FavoriteGenres = Convert.To(reader["favoriteGenres"]),
-                ProfileName = Convert.ToString(reader["profile_Name"]),
+                Username = Convert.ToString(reader["user"]),
             };
 
-            return accountFromReader;
+            return userFromReader;
         }
     }
+    */
 }
