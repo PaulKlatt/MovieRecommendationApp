@@ -1,7 +1,10 @@
 <template>
-    <div id="user-homepage">
-      <h2>Choose the genres you would like to browse</h2>
-      <form class="genre-form">
+  <div class="update-account">
+      <h3>Please enter any changes you want to make to your account.</h3>
+    <!-- need to be able to update database from here with account info --> 
+    <form class="genre-form">
+        <label for="profile-name">Profile Name: </label>
+        <input name="profile-name" type="text"/>
         <ul class="genres">
           <li>
             <input name="action" type="checkbox"/>
@@ -29,9 +32,11 @@
 
           </li>
         </ul>
-        <button type="submit">Find Random Movie!</button>
-      </form>
-    </div>
+        <label for="password">Password: </label>
+        <input name="password" type="text"/>
+        <button type="submit">Update Account Info</button>
+    </form>
+  </div>  
 </template>
 
 <script>
@@ -41,7 +46,5 @@ export default {
 </script>
 
 <style>
-ul {
-  list-style-type: none;
-}
+
 </style>

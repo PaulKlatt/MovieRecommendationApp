@@ -60,7 +60,7 @@ const router = new Router({
       component: Account,
       meta: {
         requiresAuth: true
-    }
+      }
     }],
 })
 

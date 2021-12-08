@@ -25,17 +25,31 @@ namespace Capstone.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT accounts.accountId, accounts.userId, profileName " +
+                    SqlCommand cmd = new SqlCommand("SELECT accounts.account_Id, accounts.user_Id, profile_Name " +
                         "FROM accounts " +
-                        "JOIN genre_accounts ON account.account_id = genre.account_id " +
-                        "JOIN genres ON genre.genre_id = genre_accounts.genre_id" +
-                        "WHERE accounts.accountId = @accountId", conn);
-                    cmd.Parameters.AddWithValue("@accountId", accountId);
+                        "WHERE accounts.account_Id = @account_Id ", conn);
+                    cmd.Parameters.AddWithValue("@account_Id", accountId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     if (reader.Read())
                     {
                         returnAccount = GetAccountFromReader(reader);
+                    }                
+                }
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd2 = new SqlCommand("SELECT genre_name " +
+                                                     "FROM accounts " +
+                                                     "JOIN genres_accounts ON accounts.account_id = genres_accounts.account_id " +
+                                                     "JOIN genres ON genres.genre_id = genres_accounts.genre_id " +
+                                                     "WHERE accounts.account_Id = @account_Id", conn);
+                    cmd2.Parameters.AddWithValue("@account_Id", accountId);
+                    SqlDataReader reader2 = cmd2.ExecuteReader();
+
+                    while (reader2.Read())
+                    {
+                        returnAccount.FavoriteGenres.Add(Convert.ToString(reader2["genre_name"]));
                     }
                 }
             }
@@ -78,7 +92,7 @@ namespace Capstone.DAO
                 AccountId = Convert.ToInt32(reader["account_id"]),
                 UserId = Convert.ToInt32(reader["user_id"]),
                 //FavoriteGenres = Convert.To(reader["favoriteGenres"]),
-                ProfileName = Convert.ToString(reader["profileName"]),
+                ProfileName = Convert.ToString(reader["profile_Name"]),
             };
 
             return accountFromReader;
