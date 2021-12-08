@@ -26,7 +26,6 @@ CREATE TABLE users (
 
 CREATE TABLE accounts (
 	account_id int IDENTITY(1,1) NOT NULL,
-	favorite_genres varchar(50) NOT NULL,
 	profile_name varchar(50) NOT NULL,
 	user_id int NOT NULL
 	CONSTRAINT PK_accounts PRIMARY KEY (account_id),
@@ -39,13 +38,13 @@ CREATE TABLE genres (
 	CONSTRAINT PK_genres PRIMARY KEY (genre_id)
 )
 
-CREATE TABLE genre_accounts (
+CREATE TABLE [genres_accounts] (
 	genre_id int NOT NULL,
-	account_id int NOT NULL
-	CONSTRAINT PK_genre_accounts PRIMARY KEY (genre_id, account_id),
-	CONSTRAINT FK_genre_accounts_genres FOREIGN KEY (genre_id) references genres (genre_id),
-	CONSTRAINT FK_genre_accounts_accounts FOREIGN KEY (account_id) references accounts (account_id)
-)
+	account_id int NOT NULL,
+	CONSTRAINT [PK_genres_accounts] PRIMARY KEY (genre_id, account_id),
+	CONSTRAINT [FK_genres_accounts_genres] FOREIGN KEY (genre_id) references genres (genre_id),
+	CONSTRAINT [FK_genres_accounts_accounts] FOREIGN KEY (account_id) references accounts (account_id)
+);
 
 --populate default data
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg45HuwT7PZkfuKTz6IB90CtWY4=','LHxP4Xh7bN0=','user');
