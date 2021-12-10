@@ -14,16 +14,16 @@
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
           <li>Title: {{ suggestedMovie.title }}</li>
-          <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.poster_path" /></li>
+          <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
           <li>Overview: {{ suggestedMovie.overview }}</li>
-          <li>Release Date: {{ suggestedMovie.release_date }}</li>
+          <li>Release Date: {{ suggestedMovie.releaseDate }}</li>
         </ul>
       </div>
     </div>
 </template>
 
 <script>
-import movieApiService from '../services/MovieApiService';
+import movieService from '../services/MovieService';
 
 export default {
 
@@ -38,7 +38,7 @@ export default {
   created() {
     // call the genres service? or maybe its movie service? to find the available genres
     // and then loop through them to give options
-    movieApiService.getGenres().then( response => {
+    movieService.getGenres().then( response => {
       console.log(response.data)
       this.genres = response.data.genres
     }).catch ( error => {
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     GetRandomMovie(){
-      movieApiService.getMovies(this.queryString).then( response => {
+      movieService.getMovies(this.queryString).then( response => {
         const movieArray = response.data.results;
         const min = Math.ceil(movieArray.length - 1);
         const max = Math.floor(0);
