@@ -20,6 +20,9 @@ namespace Capstone.Models
         public string Username { get; set; }
         public string Role { get; set; }
         public List<string> FavoriteGenres { get; set; } = new List<string>();
+
+        // list of favorite movies
+        // list of movies I don't want to see again
     }
 
     /// <summary>

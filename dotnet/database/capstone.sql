@@ -25,6 +25,16 @@ CREATE TABLE users (
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 )
 
+CREATE TABLE user_acct (
+	acct_id int IDENTITY(1,1) NOT NULL,
+	user_id int NOT NULL,
+	favorite_movies varchar(300) NULL,
+
+	CONSTRAINT PK_user_acct PRIMARY KEY (acct_id),
+	CONSTRAINT FK_user_acct_users FOREIGN KEY (user_id) references users (user_id)
+
+)
+
 CREATE TABLE genres (
 	genre_id int IDENTITY(1, 1) NOT NULL,
 	genre_name varchar(50) NOT NULL

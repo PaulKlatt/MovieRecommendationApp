@@ -28,7 +28,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("{userId}")]
-        public ActionResult<Account> GetAccountById(int userId)
+        public ActionResult<ReturnUser> GetAccountById(int userId)
         {
             ReturnUser returnUser = null;
 
