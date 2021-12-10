@@ -1,111 +1,69 @@
 <template>
     <div id="user-homepage">
+      <!-- this might be its own component, ChooseGenres -->
       <h2>Choose the genres you would like to browse</h2>
-      <form class="genre-form">
+      <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
         <ul class="genres">
-          <li >
-
-          <li>
-            <input name="Action" type="checkbox"/>
-            <label for="Action">Action</label>
-
-          </li>
-          <li>
-            <input name="Adventure" type="checkbox"/>
-            <label for="Adventure">Adventure</label>
-
-          </li>
-          <li>
-            <input name="Animation" type="checkbox"/>
-            <label for="Animation">Animation</label>
-
-          </li>
-          <li>
-            <input name="Comedy" type="checkbox"/>
-            <label for="Comedy">Comedy</label>
-
-          </li>
-          <li>
-            <input name="Crime" type="checkbox"/>
-            <label for="Crime">Crime</label>
-          </li>
-          <li>
-            <input name="Documentary" type="checkbox"/>
-            <label for="Documentary">Documentary</label>
-          </li>
-          <li>
-            <input name="Drama" type="checkbox"/>
-            <label for="Drama">Drama</label>
-          </li>
-          <li>
-            <input name="Family" type="checkbox"/>
-            <label for="Family">Family</label>
-          </li>
-          <li>
-            <input name="Fantasy" type="checkbox"/>
-            <label for="Fantasy">Fantasy</label>
-          </li>
-          <li>
-            <input name="History" type="checkbox"/>
-            <label for="History">History</label>
-          </li>
-          <li>
-            <input name="Horror" type="checkbox"/>
-            <label for="Horror">Horror</label>
-          </li>
-          <li>
-            <input name="Music" type="checkbox"/>
-            <label for="Music">Music</label>
-          </li>
-          <li>
-            <input name="Mystery" type="checkbox"/>
-            <label for="Myster">Mystery</label>
-          </li>
-          <li>
-            <input name="Romance" type="checkbox"/>
-            <label for="Romance">Romance</label>
-          </li>
-          <li>
-            <input name="Science Fiction" type="checkbox"/>
-            <label for="Science Fiction">Science Fiction</label>
-          </li>
-          <li>
-            <input name="TV Movie" type="checkbox"/>
-            <label for="TV Movie">TV Movie</label>
-          </li>
-          <li>
-            <input name="Thriller" type="checkbox"/>
-            <label for="Thriller">Thriller</label>
-          </li>
-          <li>
-            <input name="War" type="checkbox"/>
-            <label for="War">War</label>
-          </li>
-          <li>
-            <input name="Western" type="checkbox"/>
-            <label for="Western">Western</label>
+          <li v-for="genre in genres" v-bind:key='genre.id'>
+            <input v-bind:name='genre.name' type='checkbox' v-bind:value='genre.id' v-model='selected_genre_ids' />
+            <label v-bind:for='genre.name'>{{ genre.name }}</label>
           </li>
         </ul>
-        <!--<li v-for=""> -->
-
         <button type="submit">Find Random Movie!</button>
       </form>
+      <div id="movie-details" v-if="suggestedMovie">
+        <ul>
+          <li>Title: {{ suggestedMovie.title }}</li>
+          <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.poster_path" /></li>
+          <li>Overview: {{ suggestedMovie.overview }}</li>
+          <li>Release Date: {{ suggestedMovie.release_date }}</li>
+        </ul>
+      </div>
     </div>
 </template>
 
 <script>
+import movieApiService from '../services/MovieApiService';
+
 export default {
 
   data() {
     return {
       genres: [],
-      selected_genre_ids: [] 
+      selected_genre_ids: [],
+      suggestedMovie: false,
       //bind selected genres to the checkboxes
     }
   },
   created() {
     // call the genres service? or maybe its movie service? to find the available genres
     // and then loop through them to give options
+    movieApiService.getGenres().then( response => {
+      console.log(response.data)
+      this.genres = response.data.genres
+    }).catch ( error => {
+      //ERROR HANDLING
+      console.log('Something messed up' + error)
+    }); 
+  },
+  computed: {
+    queryString() {
+      return this.selected_genre_ids.join('|');
+    }
+  },
+  methods: {
+    GetRandomMovie(){
+      movieApiService.getMovies(this.queryString).then( response => {
+        const movieArray = response.data.results;
+        const min = Math.ceil(movieArray.length - 1);
+        const max = Math.floor(0);
+        const randomMovieIndex = Math.floor(Math.random() * (max - min + 1) + min);
+        this.suggestedMovie = movieArray[randomMovieIndex];
+    }).catch ( error => {
+      //ERROR HANDLING
+      console.log('Something messed up' + error)
+    }); 
+    }
   }
 }
 </script>
