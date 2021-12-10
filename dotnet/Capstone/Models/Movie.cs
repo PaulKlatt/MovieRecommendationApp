@@ -8,6 +8,8 @@ namespace Capstone.Models
     public class MovieResults
     {
         public List<Movie> Results { get; set; }
+
+        public int TotalPages { get; set; }
     }
 
     public class Movie

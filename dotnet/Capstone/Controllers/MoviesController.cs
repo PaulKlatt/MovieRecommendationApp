@@ -24,7 +24,7 @@ namespace Capstone.Controllers
             movieDao = _movieDao;
         }
 
-        [HttpGet("genres/")]
+        [HttpGet("genrelist/")]
         public ActionResult<GenreList> GetGenres()
         {
             GenreList genreList;
@@ -47,6 +47,39 @@ namespace Capstone.Controllers
             MovieResults movieList;
 
             movieList = movieDao.GetMoviesByGenre(genreIds);
+
+            if (movieList == null)
+            {
+                return NotFound("Movies not found");
+            }
+            else
+            {
+                return Ok(movieList);
+            }
+        }
+        [HttpGet("genres/")]
+        public ActionResult<MovieResults> GetAllMovies()
+        {
+            MovieResults movieList;
+
+            movieList = movieDao.GetMoviesByGenre("");
+
+            if (movieList == null)
+            {
+                return NotFound("Movies not found");
+            }
+            else
+            {
+                return Ok(movieList);
+            }
+        }
+
+        [HttpGet("genres/{genreIds}/page/{pageNumber}")]
+        public ActionResult<MovieResults> GetRandomMovies(string genreIds, int pageNumber)
+        {
+            MovieResults movieList;
+
+            movieList = movieDao.GetRandomMoviePage(genreIds, pageNumber);
 
             if (movieList == null)
             {

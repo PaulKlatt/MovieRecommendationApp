@@ -32,6 +32,7 @@ export default {
       genres: [],
       selected_genre_ids: [],
       suggestedMovie: false,
+      sameGenres: false
       //bind selected genres to the checkboxes
     }
   },
@@ -53,16 +54,31 @@ export default {
   },
   methods: {
     GetRandomMovie(){
-      movieService.getMovies(this.queryString).then( response => {
+      let randomPageNumber;
+        await movieService.getMovies(this.queryString).then( response => {
+          const totalPages = response.data.totalPages;
+          const min = Math.ceil(1);
+          const max = Math.floor(totalPages);
+          randomPageNumber = Math.floor(Math.random() * (max - min + 1) + min);
+          console.log(randomPageNumber);
+        }).catch ( error => {
+      //ERROR HANDLING
+      console.log('Something messed up 1' + error)
+        }); 
+
+      movieService.getRandomMoviePage(this.queryString + "/page/" + randomPageNumber).then( response => {
         const movieArray = response.data.results;
-        const min = Math.ceil(movieArray.length - 1);
-        const max = Math.floor(0);
+        const min = Math.ceil(0);
+        const max = Math.floor(movieArray.length - 1);
         const randomMovieIndex = Math.floor(Math.random() * (max - min + 1) + min);
         this.suggestedMovie = movieArray[randomMovieIndex];
+        console.log(movieArray)
     }).catch ( error => {
       //ERROR HANDLING
-      console.log('Something messed up' + error)
+      console.log('Something messed up 2' + error)
     }); 
+    
+      
     }
   }
 }
