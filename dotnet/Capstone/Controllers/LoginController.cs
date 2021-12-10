@@ -57,10 +57,12 @@ namespace Capstone.Controllers
             }
 
             User user = userDao.AddUser(userParam.Username, userParam.Password, userParam.Role);
+           
             if (user != null)
             {
                 result = Created(user.Username, null); //values aren't read on client
             }
+           
             else
             {
                 result = BadRequest(new { message = "An error occurred and user was not created." });
