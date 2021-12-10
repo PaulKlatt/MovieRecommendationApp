@@ -6,7 +6,7 @@
     </div>
   <div id="login" class="text-center">
     <form class="form-signin" @submit.prevent="login">
-      <h1 class="h3 mb-3 font-weight-normal">Please Sign In</h1>
+      <h2 class="h3 mb-3 font-weight-normal">Please Sign In</h2>
       <div
         class="alert alert-danger"
         role="alert"
@@ -116,6 +116,7 @@ export default {
   /* try to center this with login info? */
   width:50%;
   flex-wrap: wrap;
+  text-align: center;
 }
 
 .homepage {
@@ -130,6 +131,53 @@ export default {
   grid-area: cat;
 }
 
+@media only screen and (max-width: 768px) {
+.homepage {
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "description"
+    "login"
+    "cat";
 
+  }
+  .bestcat{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
 
+  }
+  .form-signin * {
+   display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+}
+
+h2{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    font-size: 1.25em;
+}
+
+p{
+      display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    font-size:1em;
+
+}
+#app-details {
+  /* try to center this with login info? */
+  width:95%;
+  flex-wrap: wrap;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+}
 </style>
