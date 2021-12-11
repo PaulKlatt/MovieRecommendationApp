@@ -117,6 +117,29 @@ namespace Capstone.DAO
             return returnUser;
         }
 
+        public void UpdateUser (User user)
+        {
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, user_role = @user_role where user_id = @user_id", conn);
+                    cmd.Parameters.AddWithValue("@password_hash", user.PasswordHash);
+                    cmd.Parameters.AddWithValue("@username", user.Username);
+                    cmd.Parameters.AddWithValue("@salt", user.Salt);
+                    cmd.Parameters.AddWithValue("@user_role", user.Role);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+        }
+
        /* public ReturnUser Adduser(int userId, List<string> favoriteGenres, string profileName)
         {
             int newuserId;

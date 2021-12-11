@@ -43,6 +43,32 @@ namespace Capstone.Controllers
                 return Ok(returnUser);
             }
         }
+
+        [HttpPost("{userId}")]
+
+        public IActionResult UpdateUserPassword(LoginUser userParam)
+        {
+            IActionResult result = Unauthorized(new { message = "Password is incorrect" });
+
+            User user = userDao.GetUser(userParam.Username);
+
+            if (user != null && passwordHasher.VerifyHashMatch(user.PasswordHash, userParam.Password, user.Salt))
+            {
+                result = Ok();
+            }
+            return result;
+        }
+
+        [HttpPut("{userId}")]
+
+        public ActionResult<User> UpdateUserPassword(User user, string username)
+        {
+           User newUser = userDao.GetUser(username);
+
+             userDao.UpdateUser(newUser);
+            return Ok();
+        }
+
     }
 
 
