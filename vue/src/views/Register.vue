@@ -42,6 +42,15 @@
                 <td>
                 </td>
                 <td>
+                  <div class="alert alert-danger" role="alert" v-if="passwordErrors">
+                {{ passwordErrorMsg }} </div>
+                </td>
+                </tr>
+              <tr>
+                <td>
+                  <label for="confirmPassword" class="sr-only">Confirm Password</label>
+                </td>
+                <td>
                   <input
                       type="password"
                       id="confirmPassword"
@@ -95,17 +104,19 @@ export default {
       },
       registrationErrors: false,
       registrationErrorMsg: 'Username is already taken, please choose a unique name.',
+      passwordErrors: false,
+      passwordErrorMsg: "Password"
     };
   },
   methods: {
     register() {
       if (this.user.password != this.user.confirmPassword) {
-        this.registrationErrors = true;
-        this.registrationErrorMsg = 'Password & Confirm Password do not match.';
+        this.passwordErrors = true;
+        this.passwordErrorMsg = 'Password & Confirm Password do not match.';
       } else
        if(this.user.password.length < 8 || this.user.confirmPassword.length < 8){
-        this.registrationErrors = true;
-        this.registrationErrorMsg = 'Password must be at least 8 characters long';
+        this.passwordErrors = true;
+        this.passwordErrorMsg = 'Password must be at least 8 characters long';
       }
     
       
@@ -142,6 +153,8 @@ export default {
 </script>
 
 <style>
+
+
 
 </style>>
 
