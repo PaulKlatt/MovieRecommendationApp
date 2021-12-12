@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    GetRandomMovie(){
+    async GetRandomMovie(){
       let randomPageNumber;
         await movieService.getMovies(this.queryString).then( response => {
           const totalPages = response.data.totalPages;
