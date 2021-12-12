@@ -11,7 +11,7 @@ namespace Capstone.DAO
 
         public GenreList GetGenres();
 
-        public MovieResults GetMoviesByGenre(string genres);
+        public MovieResults GetTotalPagesByGenre(string genres);
 
         public MovieResults GetRandomMoviePage(string genres, int pageNumber);
     }

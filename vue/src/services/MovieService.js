@@ -6,11 +6,11 @@ export default {
     return axios.get('/movies/genrelist')
   },
 
-  getMovies(genreIds){
+  getRandomPageNumber(genreIds){
    return axios.get(`/movies/genres/${genreIds}`)
   },
 
-  getRandomMoviePage(queryEnd){
+  getRandomMovie(queryEnd){
     return axios.get(`/movies/genres/${queryEnd}`)
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Capstone.Models;
+using System.Collections.Generic;
 
 namespace Capstone.DAO
 {
@@ -8,5 +9,11 @@ namespace Capstone.DAO
         User AddUser(string username, string password, string role);
 
         public ReturnUser GetReturnUser(int userId);
+
+        public bool SaveToExcluded(MovieToExclude movie);
+
+        public bool UpdateRemovalTrackers(int userid);
+
+        public List<int> GetExcludedMoviesByUser(int userId);
     }
 }

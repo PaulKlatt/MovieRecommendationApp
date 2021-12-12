@@ -11,6 +11,9 @@
         </ul>
         <button type="submit">Find Random Movie!</button>
       </form>
+      <button v-on:click='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
+      <button v-on:click='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
+      <button v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
           <li>Title: {{ suggestedMovie.title }}</li>
@@ -24,6 +27,7 @@
 
 <script>
 import movieService from '../services/MovieService';
+import userService from '../services/UserService';
 
 export default {
 
@@ -32,7 +36,8 @@ export default {
       genres: [],
       selected_genre_ids: [],
       suggestedMovie: false,
-      sameGenres: false
+      sameGenres: false,
+      currentUser: false
       //bind selected genres to the checkboxes
     }
   },
@@ -40,12 +45,22 @@ export default {
     // call the genres service? or maybe its movie service? to find the available genres
     // and then loop through them to give options
     movieService.getGenres().then( response => {
-      console.log(response.data)
       this.genres = response.data.genres
     }).catch ( error => {
       //ERROR HANDLING
       console.log('Something messed up' + error)
-    }); 
+    });
+
+    userService.getUser(this.$store.state.user.userId).then(response => {
+
+        if (response.status === 200 && response.data != null) {
+          this.currentUser = response.data;
+          /* maybe send them somewhere? */
+        } else {
+          alert("Account not found, please attempt to sign in again.")
+          /*this.$router.push(`/${name: login}`); */
+        }
+    });
   },
   computed: {
     queryString() {
@@ -53,32 +68,33 @@ export default {
     }
   },
   methods: {
-    async GetRandomMovie(){
-      let randomPageNumber;
-        await movieService.getMovies(this.queryString).then( response => {
-          const totalPages = response.data.totalPages;
-          const min = Math.ceil(1);
-          const max = Math.floor(totalPages);
-          randomPageNumber = Math.floor(Math.random() * (max - min + 1) + min);
-          console.log(randomPageNumber);
+    GetRandomMovie(){
+      // do while loop, while its in exluded movies list
+      /*let randomPageNumber;
+        await movieService.getRandomPageNumber(this.queryString).then( response => {
+         randomPageNumber = response.data;
         }).catch ( error => {
       //ERROR HANDLING
-      console.log('Something messed up 1' + error)
+      console.log('Something messed up 1: ' + error)
         }); 
-
-      movieService.getRandomMoviePage(this.queryString + "/page/" + randomPageNumber).then( response => {
-        const movieArray = response.data.results;
-        const min = Math.ceil(0);
-        const max = Math.floor(movieArray.length - 1);
-        const randomMovieIndex = Math.floor(Math.random() * (max - min + 1) + min);
-        this.suggestedMovie = movieArray[randomMovieIndex];
-        console.log(movieArray)
+*/
+      movieService.getRandomMovie(this.queryString + "/users/" + this.currentUser.userId).then( response => {
+        this.suggestedMovie = response.data;
     }).catch ( error => {
       //ERROR HANDLING
-      console.log('Something messed up 2' + error)
-    }); 
-    
-      
+      console.log('Something messed up 2: ' + error)
+    });    
+    },
+
+    SaveToExcluded(opinion){
+      const movieToExclude = {
+        MovieId: this.suggestedMovie.id,
+        UserId: this.currentUser.userId,
+        Opinion: opinion
+      }
+      userService.saveToExcluded(this.currentUser.userId, movieToExclude);
+
+      this.GetRandomMovie();
     }
   }
 }

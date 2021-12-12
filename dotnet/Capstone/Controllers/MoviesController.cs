@@ -13,15 +13,13 @@ namespace Capstone.Controllers
     [ApiController]
     public class MoviesController : Controller
     {
-        private readonly ITokenGenerator tokenGenerator;
-        private readonly IPasswordHasher passwordHasher;
         private readonly IMovieDao movieDao;
+        private readonly IUserDao userDao;
 
-        public MoviesController(ITokenGenerator _tokenGenerator, IPasswordHasher _passwordHasher, IMovieDao _movieDao)
+        public MoviesController(IUserDao _userDao, IMovieDao _movieDao)
         {
-            tokenGenerator = _tokenGenerator;
-            passwordHasher = _passwordHasher;
             movieDao = _movieDao;
+            userDao = _userDao;
         }
 
         [HttpGet("genrelist/")]
@@ -41,28 +39,52 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet("genres/{genreIds}")]
-        public ActionResult<MovieResults> GetMoviesByGenre(string genreIds)
+        [HttpGet("genres/{genreIds}/users/{userId}")]
+        public ActionResult<int> GetTotalPagesByGenre(string genreIds, int userId)
         {
-            MovieResults movieList;
-
-            movieList = movieDao.GetMoviesByGenre(genreIds);
-
-            if (movieList == null)
+            Movie returnMovie;
+            //call the excluded list
+            List<int> excludedMovieIds = userDao.GetExcludedMoviesByUser(userId);
+            do
             {
-                return NotFound("Movies not found");
+                MovieResults firstPageMovieList;
+
+                firstPageMovieList = movieDao.GetTotalPagesByGenre(genreIds);
+
+                if (firstPageMovieList == null)
+                {
+                    return NotFound("Movies not found");
+                }
+                else
+                {
+                    Random rnd = new Random();
+                    int randomPage = rnd.Next(1, firstPageMovieList.TotalPages + 1);
+
+                    MovieResults randomPageMovieList = movieDao.GetRandomMoviePage(genreIds, randomPage);
+
+                    if (randomPageMovieList == null)
+                    {
+                        return NotFound("Movies not found");
+                    }
+                    else
+                    {
+                        returnMovie = randomPageMovieList.Results[rnd.Next(0, randomPageMovieList.Results.Count - 1)];
+                        
+                    }
+
+                }
             }
-            else
-            {
-                return Ok(movieList);
-            }
+            while (excludedMovieIds.Contains(returnMovie.Id));
+
+            return Ok(returnMovie);
+
         }
         [HttpGet("genres/")]
-        public ActionResult<MovieResults> GetAllMovies()
+        public ActionResult<int> GetPageNumberOfAllMovies()
         {
             MovieResults movieList;
 
-            movieList = movieDao.GetMoviesByGenre("");
+            movieList = movieDao.GetTotalPagesByGenre("");
 
             if (movieList == null)
             {
@@ -75,7 +97,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("genres/{genreIds}/page/{pageNumber}")]
-        public ActionResult<MovieResults> GetRandomMovies(string genreIds, int pageNumber)
+        public ActionResult<MovieResults> GetRandomMovie(string genreIds, int pageNumber)
         {
             MovieResults movieList;
 
@@ -87,7 +109,10 @@ namespace Capstone.Controllers
             }
             else
             {
-                return Ok(movieList);
+
+                Random rnd = new Random();
+                Movie returnMovie = movieList.Results[rnd.Next(0, 20)];
+                return Ok(returnMovie);
             }
         }
     }

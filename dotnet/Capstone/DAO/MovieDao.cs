@@ -35,7 +35,7 @@ namespace Capstone.DAO
             }
         }
 
-        public MovieResults GetMoviesByGenre(string genres)
+        public MovieResults GetTotalPagesByGenre(string genres)
         {
             RestRequest request = new RestRequest("https://api.themoviedb.org/3/discover/movie?api_key=bb16218327fa750dbdfc80a7ff286caf&language=en-US&include_adult=false&include_video=false&with_genres=" + genres);
             IRestResponse<MovieResults> response = client.Get<MovieResults>(request);
