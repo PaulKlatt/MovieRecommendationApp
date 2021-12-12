@@ -96,11 +96,16 @@ methods: {
       if (this.user.newPassword != this.user.confirmNewPassword) {
         this.passwordError = true;
         this.passwordErrorMsg = 'New Password & Confirm New Password do not match.';
-      } else
-       if(this.user.newPassword.length < 8 || this.user.confirmNewPassword.length < 8){
+      } 
+      else if(this.user.newPassword.length < 8 || this.user.confirmNewPassword.length < 8){
         this.passwordError = true;
         this.passwordErrorMsg = 'Password must be at least 8 characters long';
       }
+      else if(this.user.newPassword == this.user.confirmNewPassword && this.user.newPassword == this.user.currentPassword){
+        this.passwordError = true;
+        this.passwordErrorMsg = 'New password cannot be the same as the old password.';
+      }
+
     
       
       else {

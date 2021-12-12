@@ -65,7 +65,7 @@ namespace Capstone.Controllers
         {
            User newUser = userDao.GetUser(username);
 
-             userDao.UpdateUser(newUser);
+            userDao.UpdateUser(newUser);
             return Ok();
         }
 

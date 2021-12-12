@@ -10,7 +10,4 @@ export default {
   return axios.put('/account/:id', user)
   }
 
-  
-
-
 }

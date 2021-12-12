@@ -140,30 +140,6 @@ namespace Capstone.DAO
             }
         }
 
-       /* public ReturnUser Adduser(int userId, List<string> favoriteGenres, string profileName)
-        {
-            int newuserId;
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-
-                    SqlCommand cmd = new SqlCommand("INSERT INTO users (users.userId, favoriteGenres) OUTPUT INSERTED.userId VALUES (@users.userId, @favoriteGenres, @profileName)", conn);
-                    cmd.Parameters.AddWithValue("@users.userId", userId);
-                    cmd.Parameters.AddWithValue("@favoriteGenres", favoriteGenres);
-                    cmd.Parameters.AddWithValue("@profileName", profileName);
-                    newuserId = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-            }
-            catch (SqlException)
-            {
-                throw;
-            }
-
-            return Getuser(newuserId);
-        }
-       */
         private User GetUserFromReader(SqlDataReader reader)
         {
             User u = new User()
