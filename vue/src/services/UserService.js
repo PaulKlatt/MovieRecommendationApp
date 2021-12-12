@@ -7,7 +7,7 @@ export default {
   },
 
   updatePassword(user){
-  return axios.put('/account/:id', user)
+    return axios.put('/update', user)
   }
 
 }

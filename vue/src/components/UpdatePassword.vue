@@ -114,7 +114,7 @@ methods: {
           .then((response) => {
             if (response.status == 200) {
               this.$router.push({
-                path: '/account/:id',
+                path: '/update',
                 query: { registration: 'success' },
               });
             }

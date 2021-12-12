@@ -61,16 +61,18 @@ namespace Capstone.Controllers
 
         [HttpPut("{userId}")]
 
-        public ActionResult<User> UpdateUserPassword(User user, string username)
+        public ActionResult<RegisterUser> UpdateUserPassword(RegisterUser user)
         {
-           User newUser = userDao.GetUser(username);
+            RegisterUser newUser = userDao.GetRegisterUser(user.Username);
+            // Update password - takes in user object (user.password)
+            // Put user into update password
 
-            userDao.UpdateUser(newUser);
+            userDao.UpdatePassword(newUser);
             return Ok();
+
         }
 
     }
-
 
 }
 
