@@ -40,6 +40,15 @@ CREATE TABLE genres (
 	genre_name varchar(50) NOT NULL
 	CONSTRAINT PK_genres PRIMARY KEY (genre_id)
 )
+
+CREATE TABLE users_excludedMovies (
+	user_id int NOT NULL,
+	movie_id int NOT NULL,
+	opinion varchar(12) NOT NULL
+
+	CONSTRAINT [PK_users_excludedMovies] PRIMARY KEY (movie_id, user_id),
+	CONSTRAINT [FK_users_excludedMovies_users] FOREIGN KEY (user_id) references users (user_id)
+)
 INSERT INTO dbo.genres (genre_id, genre_name)
 VALUES
 (28, 'Action'),
