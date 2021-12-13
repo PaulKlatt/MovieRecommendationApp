@@ -8,6 +8,8 @@ namespace Capstone.Models
     public class MovieResults
     {
         public List<Movie> Results { get; set; }
+
+        public int TotalPages { get; set; }
     }
 
     public class Movie
@@ -33,5 +35,21 @@ namespace Capstone.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
+    }
+
+    public class TotalPages
+    {
+        public int PageNumber { get; set; }
+    }
+
+    public class MovieToExclude
+    {
+        public int MovieId { get; set; }
+
+        public int UserId { get; set; }
+
+        public string Opinion { get; set; }
+
+        public int RemovalTracker { get; set; }
     }
 }

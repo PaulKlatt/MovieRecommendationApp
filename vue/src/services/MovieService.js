@@ -3,10 +3,14 @@ import axios from 'axios';
 export default {
 
   getGenres() {
-    return axios.get('/movies/genres')
+    return axios.get('/movies/genrelist')
   },
 
-  getMovies(genreIds){
-      return axios.get(`/movies/genres/${genreIds}`)
+  getRandomPageNumber(genreIds){
+   return axios.get(`/movies/genres/${genreIds}`)
+  },
+
+  getRandomMovie(queryEnd){
+    return axios.get(`/movies/genres/${queryEnd}`)
   }
 }
