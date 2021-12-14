@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
+    <h1>home</h1>
     <!--might want to put this as some v-if 
     <p>You must be authenticated to see this</p>
     -->
