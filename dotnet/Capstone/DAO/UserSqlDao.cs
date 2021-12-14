@@ -44,33 +44,33 @@ namespace Capstone.DAO
             return returnUser;
         }
 
-        public RegisterUser GetRegisterUser(string username)
-        {
-            RegisterUser returnUser = null;
+        //public RegisterUser GetRegisterUser(string username)
+        //{
+        //    RegisterUser returnUser = null;
 
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT user_id, username, password_hash, salt, user_role FROM users WHERE username = @username", conn);
-                    cmd.Parameters.AddWithValue("@username", username);
-                    SqlDataReader reader = cmd.ExecuteReader();
+        //            SqlCommand cmd = new SqlCommand("SELECT user_id, username, password_hash, salt, user_role FROM users WHERE username = @username", conn);
+        //            cmd.Parameters.AddWithValue("@username", username);
+        //            SqlDataReader reader = cmd.ExecuteReader();
 
-                    if (reader.Read())
-                    {
-                        returnUser = GetRegisterUserFromReader(reader);
-                    }
-                }
-            }
-            catch (SqlException)
-            {
-                throw;
-            }
+        //            if (reader.Read())
+        //            {
+        //                returnUser = GetRegisterUserFromReader(reader);
+        //            }
+        //        }
+        //    }
+        //    catch (SqlException)
+        //    {
+        //        throw;
+        //    }
 
-            return returnUser;
-        }
+        //    return returnUser;
+        //}
 
         public User AddUser(string username, string password, string role)
         {
@@ -145,7 +145,7 @@ namespace Capstone.DAO
             return returnUser;
         }
 
-<<<<<<< HEAD
+
         //public void UpdateUser (User user)
         //{
         //    try
@@ -169,7 +169,7 @@ namespace Capstone.DAO
         //    }
         //}
 
-=======
+
         public bool SaveToExcluded(MovieToExclude movie)
         {
             try
@@ -234,7 +234,7 @@ namespace Capstone.DAO
             }
             return excludedMovieIds;
         }
->>>>>>> ea17b88ef4f948123b53fdfca9b607fd52910a61
+
         private User GetUserFromReader(SqlDataReader reader)
         {
             User u = new User()
@@ -249,7 +249,6 @@ namespace Capstone.DAO
             return u;
         }
 
-<<<<<<< HEAD
         private RegisterUser GetRegisterUserFromReader(SqlDataReader reader)
         {
             RegisterUser u = new RegisterUser()
@@ -262,8 +261,7 @@ namespace Capstone.DAO
 
             return u;
         }
-=======
->>>>>>> ea17b88ef4f948123b53fdfca9b607fd52910a61
+
 
         private ReturnUser GetReturnUserFromReader(SqlDataReader reader)
         {
@@ -282,14 +280,13 @@ namespace Capstone.DAO
             IPasswordHasher passwordHasher = new PasswordHasher();
             PasswordHash hash = passwordHasher.ComputeHash(user.Password);
 
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, role = @user_role where user_id = @user_id", conn);
+                    SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, user_role = @user_role WHERE username = @username", conn);
                     cmd.Parameters.AddWithValue("@username", user.Username);
                     cmd.Parameters.AddWithValue("@password_hash", hash.Password);
                     cmd.Parameters.AddWithValue("@salt", hash.Salt);

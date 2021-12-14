@@ -34,7 +34,8 @@ CREATE TABLE genres (
 CREATE TABLE users_excludedMovies (
 	user_id int NOT NULL,
 	movie_id int NOT NULL,
-	opinion varchar(12) NOT NULL
+	opinion varchar(12) NOT NULL,
+	removal_tracker int 
 
 	CONSTRAINT [PK_users_excludedMovies] PRIMARY KEY (movie_id, user_id),
 	CONSTRAINT [FK_users_excludedMovies_users] FOREIGN KEY (user_id) references users (user_id)
@@ -74,5 +75,3 @@ INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg4
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('admin','YhyGVQ+Ch69n4JMBncM4lNF/i9s=', 'Ar/aB2thQTI=','admin');
 
 GO
-
-select * from users

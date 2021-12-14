@@ -106,17 +106,20 @@ methods: {
         this.passwordErrorMsg = 'New password cannot be the same as the old password.';
       }
 
-    
-      
       else {
+        const newUserAndPassword = {
+          username: this.$store.state.user.username,
+          password: this.user.newPassword,
+          role: this.$store.state.user.role,
+          confirmPassword: this.user.confirmNewPassword
+        }
         userService
-          .updatePassword(this.user)
+          .updatePassword(newUserAndPassword)
           .then((response) => {
             if (response.status == 200) {
-              this.$router.push({
-                path: '/update',
-                query: { registration: 'success' },
-              });
+              this.showForm = false 
+              alert('Your password has been updated')
+              //query: { registration: 'success' },
             }
           })
           .catch((error) => {

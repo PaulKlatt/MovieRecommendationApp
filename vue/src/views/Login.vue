@@ -95,6 +95,7 @@ export default {
 
 <style scoped>
 
+
 .description {
   text-align: center;
   grid-area: description;
