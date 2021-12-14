@@ -43,6 +43,38 @@ namespace Capstone.Controllers
                 return Ok(returnUser);
             }
         }
+
+        [HttpPost("{userId}/exclude")]
+        public IActionResult SaveToExcluded(MovieToExclude movie)
+        {
+            IActionResult result;
+
+            ReturnUser existingUser = userDao.GetReturnUser(movie.UserId);
+            if (existingUser == null)
+            {
+                return Conflict(new { message = "User not found.  Please log in and try again." });
+            }
+            if (movie.Opinion == "Passed")
+            {
+                movie.RemovalTracker = 0;
+            }
+            bool isCreated = userDao.SaveToExcluded(movie);
+            
+            if (isCreated)
+            {
+                // Might need to be in a transaction inside SaveToExcluded, but should work for now
+                bool isUpdated = userDao.UpdateRemovalTrackers(movie.UserId);
+                result = Created($"{movie.UserId}/exclude", null); //values aren't read on client
+            }
+
+            else
+            {
+                result = BadRequest(new { message = $"An error occurred and the movie was not added to the {movie.Opinion} list." });
+            }
+           
+
+            return result;
+        }
     }
 
 
