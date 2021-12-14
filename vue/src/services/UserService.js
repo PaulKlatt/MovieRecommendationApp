@@ -6,6 +6,10 @@ export default {
     return axios.get(`/users/${id}`)
   },
 
+  updatePassword(user){
+    return axios.put('/users/update', user)
+  },
+  
   saveToExcluded(id, movieId) {
     return axios.post(`users/${id}/exclude`, movieId)
   }
