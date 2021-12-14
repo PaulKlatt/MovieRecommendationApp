@@ -53,4 +53,13 @@ namespace Capstone.Models
         public string ConfirmPassword { get; set; }
         public string Role { get; set; }
     }
+
+    //public class ChangePasswordUser
+    //{
+    //    public string CurrentPassword { get; set; }
+    //    public string NewPassword { get; set; }
+    //    public string ConfirmNewPassword { get; set; }
+    //    public string PasswordHash { get; set; }
+    //    public string Salt { get; set; }
+    //}
 }
