@@ -15,5 +15,11 @@ namespace Capstone.DAO
         public bool UpdateRemovalTrackers(int userid);
 
         public List<int> GetExcludedMoviesByUser(int userId);
+
+        public bool SaveMovieCard(MovieCard movie);
+
+        public List<MovieCard> GetSavedMoviesByUserId(int userId);
+
+        public bool DeleteSavedMovie(int movieId);
     }
 }

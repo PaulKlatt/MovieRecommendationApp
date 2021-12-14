@@ -164,23 +164,106 @@ namespace Capstone.DAO
             return true;
         }
 
+        public bool SaveMovieCard(MovieCard movie)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (@movie_id, @title, @poster_path, @genre_ids)", conn);
+                    cmd.Parameters.AddWithValue("@movie_id", movie.MovieId);
+                    cmd.Parameters.AddWithValue("@title", movie.Title);
+                    cmd.Parameters.AddWithValue("@poster_path", movie.PosterPath);
+                    cmd.Parameters.AddWithValue("@genre_ids", movie.GenreIds);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            return true;
+        }
+
         public List<int> GetExcludedMoviesByUser(int userId)
         {
             List<int> excludedMovieIds = new List<int>();
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT movie_id FROM dbo.users_excludedMovies WHERE user_id = @user_id", conn);
-                cmd.Parameters.AddWithValue("@user_Id", userId);
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    excludedMovieIds.Add(Convert.ToInt32(reader["movie_id"]));
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT movie_id FROM dbo.users_excludedMovies WHERE user_id = @user_id", conn);
+                    cmd.Parameters.AddWithValue("@user_Id", userId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        excludedMovieIds.Add(Convert.ToInt32(reader["movie_id"]));
+                    }
+                }
+                return excludedMovieIds;
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            
+        }
+
+        public List<MovieCard> GetSavedMoviesByUserId(int userId)
+        {
+            List<MovieCard> savedMovieCards = new List<MovieCard>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT movieCards.movie_id, title, poster_path, genre_ids FROM movieCards " +
+                                                    "JOIN users_excludedMovies ON movieCards.movie_id = users_excludedMovies.movie_id " +
+                                                    "WHERE user_id = @user_id AND (opinion = 'Favorite' OR opinion = 'Banned')", conn);
+                    cmd.Parameters.AddWithValue("@user_Id", userId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        savedMovieCards.Add(GetMovieCardFromReader(reader));
+                    }
                 }
             }
-            return excludedMovieIds;
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return savedMovieCards;
         }
+
+        public bool DeleteSavedMovie(int movieId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("DELETE FROM users_excludedMovies " +
+                                                     "WHERE movie_id = @movie_id; " +
+                                                     "DELETE FROM movieCards " +
+                                                     "WHERE movie_id = @movie_id", conn);
+                    cmd.Parameters.AddWithValue("@movie_id", movieId);
+                    int rowsAffected= cmd.ExecuteNonQuery();                                      
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return true;
+        }
+
         private User GetUserFromReader(SqlDataReader reader)
         {
             User u = new User()
@@ -195,7 +278,6 @@ namespace Capstone.DAO
             return u;
         }
 
-
         private ReturnUser GetReturnUserFromReader(SqlDataReader reader)
         {
             ReturnUser userFromReader = new ReturnUser()
@@ -206,6 +288,19 @@ namespace Capstone.DAO
             };
 
             return userFromReader;
+        }
+
+        private MovieCard GetMovieCardFromReader(SqlDataReader reader)
+        {
+            MovieCard movieCardFromReader = new MovieCard()
+            {
+                MovieId = Convert.ToInt32(reader["movie_id"]),
+                Title = Convert.ToString(reader["title"]),
+                PosterPath = Convert.ToString(reader["poster_path"]),
+                GenreIds = Convert.ToString(reader["genre_ids"])
+            };
+
+            return movieCardFromReader;
         }
     }
 }

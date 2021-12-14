@@ -57,6 +57,7 @@
 
 <script>
 import authService from "../services/AuthService";
+import movieService from "../services/MovieService";
 
 export default {
   name: "login",
@@ -78,7 +79,7 @@ export default {
           if (response.status == 200) {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
-            this.$router.push("/");
+            
           }
         })
         .catch(error => {
@@ -88,6 +89,19 @@ export default {
             this.invalidCredentials = true;
           }
         });
+      movieService
+        .getGenres()
+        .then( response => {
+          if (response.status == 200){
+            this.$store.commit('SET_GENRES', response.data.genres);
+            this.$router.push("/");
+          }
+        })
+        .catch ( error => {
+        //ERROR HANDLING
+        console.log('Something messed up' + error)
+        });
+      
     }
   }
 };

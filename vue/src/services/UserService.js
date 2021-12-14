@@ -6,8 +6,8 @@ export default {
     return axios.get(`/users/${id}`)
   },
 
-  saveToExcluded(id, movieId) {
-    return axios.post(`users/${id}/exclude`, movieId)
+  saveToExcluded(id, movieInfo) {
+    return axios.post(`users/${id}/exclude`, movieInfo)
   }
 
 }
