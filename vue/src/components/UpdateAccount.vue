@@ -38,7 +38,7 @@
         <button type="submit">Update Account Info</button>
     </form>
     <div id="change-password">
-        <form>
+        
       </div>
 
 

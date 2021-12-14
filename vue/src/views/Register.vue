@@ -2,9 +2,7 @@
   <div id="register" class="text-center">
     <form class="form-register" @submit.prevent="register">
       <h1 class="h3 mb-3 font-weight-normal">Create Account</h1>
-      <div class="alert alert-danger" role="alert" v-if="registrationErrors">
-                {{ registrationErrorMsg }}
-               </div>
+      
       <table>
         <tbody>
           <tr>
@@ -25,6 +23,15 @@
             </tr>
             <tr>
               <td>
+              </td>
+              <td>
+                <div class="alert alert-danger" id="usernameMsg" role="alert" v-if="registrationErrors">
+                {{ registrationErrorMsg }}
+               </div>
+              </td>
+              </tr>
+            <tr>
+              <td>
                 <label for="password" class="sr-only">Password</label>
                 </td>
                 <td> 
@@ -42,7 +49,7 @@
                 <td>
                 </td>
                 <td>
-                  <div class="alert alert-danger" role="alert" v-if="passwordErrors">
+                  <div class="alert alert-danger" id ="passwordMsg" role="alert" v-if="passwordErrors">
                 {{ passwordErrorMsg }} </div>
                 </td>
                 </tr>
@@ -154,6 +161,13 @@ export default {
 
 <style>
 
+#passwordMsg{
+  font-size: 10px;
+}
+
+#usernameMsg{
+  font-size: 10px;
+}
 
 
 </style>>
