@@ -41,7 +41,7 @@
         />
       </div>
       <div>
-      <router-link :to="{ name: 'register' }">need an account? </router-link> 
+      <router-link id="toRegister" :to="{ name: 'register' }">need an account? </router-link> 
       </div>
       <div>
       <button type="submit" style="background-color: #f67280; font-size: larger; 
@@ -118,6 +118,10 @@ export default {
 
 .form-signin * {
   margin: 10px 5px;
+}
+
+#toRegister {
+  color: fushia;
 }
 
 
