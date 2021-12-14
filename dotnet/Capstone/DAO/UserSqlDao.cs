@@ -44,6 +44,34 @@ namespace Capstone.DAO
             return returnUser;
         }
 
+        //public RegisterUser GetRegisterUser(string username)
+        //{
+        //    RegisterUser returnUser = null;
+
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+
+        //            SqlCommand cmd = new SqlCommand("SELECT user_id, username, password_hash, salt, user_role FROM users WHERE username = @username", conn);
+        //            cmd.Parameters.AddWithValue("@username", username);
+        //            SqlDataReader reader = cmd.ExecuteReader();
+
+        //            if (reader.Read())
+        //            {
+        //                returnUser = GetRegisterUserFromReader(reader);
+        //            }
+        //        }
+        //    }
+        //    catch (SqlException)
+        //    {
+        //        throw;
+        //    }
+
+        //    return returnUser;
+        //}
+
         public User AddUser(string username, string password, string role)
         {
             IPasswordHasher passwordHasher = new PasswordHasher();
@@ -116,6 +144,31 @@ namespace Capstone.DAO
 
             return returnUser;
         }
+
+
+        //public void UpdateUser (User user)
+        //{
+        //    try
+        //    {
+        //        using(SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+        //            SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, user_role = @user_role where user_id = @user_id", conn);
+        //            cmd.Parameters.AddWithValue("@password_hash", user.PasswordHash);
+        //            cmd.Parameters.AddWithValue("@username", user.Username);
+        //            cmd.Parameters.AddWithValue("@salt", user.Salt);
+        //            cmd.Parameters.AddWithValue("@user_role", user.Role);
+
+        //            cmd.ExecuteNonQuery();
+        //        }
+
+        //    }
+        //    catch (SqlException)
+        //    {
+        //        throw;
+        //    }
+        //}
+
 
         public bool SaveToExcluded(MovieToExclude movie)
         {
@@ -301,6 +354,31 @@ namespace Capstone.DAO
             };
 
             return movieCardFromReader;
+        public User UpdatePassword(RegisterUser user)
+        {
+            IPasswordHasher passwordHasher = new PasswordHasher();
+            PasswordHash hash = passwordHasher.ComputeHash(user.Password);
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, user_role = @user_role WHERE username = @username", conn);
+                    cmd.Parameters.AddWithValue("@username", user.Username);
+                    cmd.Parameters.AddWithValue("@password_hash", hash.Password);
+                    cmd.Parameters.AddWithValue("@salt", hash.Salt);
+                    cmd.Parameters.AddWithValue("@user_role", user.Role);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return GetUser(user.Username);
         }
     }
 }

@@ -8,6 +8,8 @@ export default {
 
   saveToExcluded(id, movieInfo) {
     return axios.post(`users/${id}/exclude`, movieInfo)
+  },
+  updatePassword(user){
+    return axios.put('/users/update', user);
   }
-
 }

@@ -1,24 +1,24 @@
 <template>
   <div class='homepage'>
     <div class="description">
-      <h1 class="title">The Superior Movie Recommendation App</h1>
-      <p>Have you ever been at home, staring at the netflix screen, unsure of what to watch? Well worry no more!  The Superior Movie Recommendation App has got you covered.</p>
+      <h1 class="title">catflix.</h1>
+      <p>have you ever been at home, staring at the netflix screen, unsure of what to watch? well worry no more! catflix has got you covered.</p>
     </div>
   <div id="login" class="text-center">
     <form class="form-signin" @submit.prevent="login">
-      <h2 class="h3 mb-3 font-weight-normal">Please Sign In</h2>
+      <h2 class="h3 mb-3 font-weight-normal">please sign in...</h2>
       <div
         class="alert alert-danger"
         role="alert"
         v-if="invalidCredentials"
-      >Invalid username and password!</div>
+      >invalid username and password!</div>
       <div
         class="alert alert-success"
         role="alert"
         v-if="this.$route.query.registration"
-      >Thank you for registering, please sign in.</div>
+      >thank you for registering, please sign in.</div>
       <div>
-        <label for="username" class="sr-only">Username</label>
+        <label for="username" class="sr-only">username:</label>
         <input
           type="text"
           id="username"
@@ -30,7 +30,7 @@
         />
       </div>
       <div>
-        <label for="password" class="sr-only">Password</label>
+        <label for="password" class="sr-only">password:</label>
         <input
           type="password"
           id="password"
@@ -41,14 +41,21 @@
         />
       </div>
       <div>
-      <router-link :to="{ name: 'register' }">Need an account?</router-link>
+      <router-link id="toRegister" :to="{ name: 'register' }">need an account? </router-link> 
       </div>
       <div>
-      <button type="submit">Sign in</button>
+      <button type="submit" style="background-color: #f67280; font-size: larger; 
+      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
+      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;
+      user-select: none; touch-action: manipulation;
+      box-shadow: 3px 3px #f8b195;
+      padding: 0.25em 0.5em;"
+      >sign in</button>
+
       </div>
     </form>
     <div id="app-details">
-      <p>Browse random movies from a large, varied collection by your favorite genres! Save your favorite movies for later reference!</p>
+      <p>browse random movies from a large, varied collection by your favorite genres! save your favorite movies for later reference!</p>
     </div>    
   </div>
   <img class = "bestcat" src="https://canary.contestimg.wish.com/api/webimage/5e1468224b7eec03c97f8915-large.jpg?cache_buster=085e00180f70ca62aa0f8a1c7d8e6bdb" />
@@ -109,6 +116,7 @@ export default {
 
 <style scoped>
 
+
 .description {
   text-align: center;
   grid-area: description;
@@ -126,16 +134,21 @@ export default {
   margin: 10px 5px;
 }
 
+#toRegister {
+  color: fushia;
+}
+
+
 #app-details {
   /* try to center this with login info? */
-  width:50%;
+  width: 50%;
   flex-wrap: wrap;
   text-align: center;
 }
 
 .homepage {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.25fr 1fr;
   grid-template-areas: 
   "description description"
    "login cat";
@@ -143,6 +156,11 @@ export default {
 
 .bestcat {
   grid-area: cat;
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  object-position: 50%;
+  border: 10px solid #6c5b7b
 }
 
 @media only screen and (max-width: 768px) {
@@ -153,45 +171,22 @@ export default {
     "description"
     "login"
     "cat";
-
   }
+
   .bestcat{
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 95%;
-
   }
-  .form-signin * {
-   display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 95%;
+
+  @media (min-width: 768px) {
+    .form-signin-submit-button {
+      padding: 16px 32px;
+    }
+  }
 }
 
-h2{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 95%;
-    font-size: 1.25em;
-}
 
-p{
-      display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 95%;
-    font-size:1em;
-
-}
-#app-details {
-  /* try to center this with login info? */
-  width:95%;
-  flex-wrap: wrap;
-  text-align: center;
-  margin-top: 16px;
-  margin-bottom: 16px;
-}
-}
 </style>
+

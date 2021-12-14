@@ -44,6 +44,7 @@ namespace Capstone.Controllers
             }
         }
 
+
         [HttpPost("{userId}/exclude")]
         public IActionResult SaveToExcluded(MovieInfo movieInfo)
         {
@@ -54,10 +55,13 @@ namespace Capstone.Controllers
             {
                 return Conflict(new { message = "User not found.  Please log in and try again." });
             }
-            
-            bool isExcluded = userDao.SaveToExcluded(movieInfo.MovieToExclude);
-            
-            if (isExcluded)
+            if (movie.Opinion == "Passed")
+            {
+                movie.RemovalTracker = 0;
+            }
+            bool isCreated = userDao.SaveToExcluded(movie);
+
+            if (isCreated)
             {
                 if (movieInfo.MovieToExclude.Opinion == "Favorite")
                 {
@@ -76,10 +80,43 @@ namespace Capstone.Controllers
             {
                 result = BadRequest(new { message = $"An error occurred and the movie was not added to the {movieInfo.MovieToExclude.Opinion} list." });
             }
-           
+
 
             return result;
         }
+    
+
+        [HttpPost("{userId}")]
+
+        public IActionResult UpdateUserPassword(LoginUser userParam)
+        {
+            IActionResult result = Unauthorized(new { message = "Password is incorrect" });
+
+            User user = userDao.GetUser(userParam.Username);
+
+            if (user != null && passwordHasher.VerifyHashMatch(user.PasswordHash, userParam.Password, user.Salt))
+            {
+                result = Ok();
+            }
+            return result;
+        }
+
+        [HttpPut("update")]
+
+        public ActionResult<RegisterUser> UpdateUserPassword(RegisterUser user)
+        {
+            User newUser = userDao.GetUser(user.Username);
+            // Update password - takes in user object (user.password)
+            // Put user into update password
+
+            if (newUser == null)
+            {
+                return Conflict(new { message = "User not found, please log in again." });
+            }
+
+            userDao.UpdatePassword(user);
+            return Ok();
+
+        }
     }
 }
-
