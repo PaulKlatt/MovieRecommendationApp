@@ -37,7 +37,7 @@ export default {
       userService.getUser(this.$store.state.user.userId).then(response => {
         this.currentUser = response.data;
 
-        if (response.status === 200 && response.data.length > 0) {
+        if (response.status === 200 && response.data != null) {
           /* maybe send them somewhere? */
         } else {
           alert("Account not found, please attempt to sign in again.")

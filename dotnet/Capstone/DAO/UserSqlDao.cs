@@ -118,16 +118,23 @@ namespace Capstone.DAO
         }
         public void DeleteUser(int userId)
         {
-
+            try
+            {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("Delete From dbo.users where user_id = @userId", conn);
+                    SqlCommand cmd = new SqlCommand("Delete From users_excludedMovies where dbo.users_excludedMovies.user_id = @userId "+ 
+                                                    "Delete From dbo.users where user_id = @userId", conn);
                     cmd.Parameters.AddWithValue("@userId", userId);
                     cmd.ExecuteNonQuery();
                 }
- 
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+   
         }
 
 

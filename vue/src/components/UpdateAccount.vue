@@ -34,14 +34,22 @@
 
           </li>
         </ul>
-        
-        <button type="submit">Update Account Info</button>
+    <button type="submit">Update Account Info</button>
+
+    
     </form>
-  </div>  
+    
+    <update-password />  
+
+    </div>
+    
+  
 </template>
 
 <script>
+import UpdatePassword from './UpdatePassword.vue'
 export default {
+  components: { UpdatePassword },
 
 }
 </script>
