@@ -12,6 +12,9 @@
     <div id="admin-account" v-if="$store.state.user.role == 'admin'">
       
     </div>
+  <div> 
+    <button>Delete Account</button>
+    </div>
         
   </div>
 </template>
@@ -41,8 +44,21 @@ export default {
           /*this.$router.push(`/${name: login}`); */
         }
       });
-}
-}
+    },
+      /* Delete Account Attempt  */
+      DeleteActiveUser() {
+      userService.deleteUser(this.$store.state.user.userId).then(response => {
+        this.currentUser = response.data;
+        
+        if (response.status === 200 && response.data.length > 0) {
+          /* maybe send them somewhere? */
+        } else {
+          alert("Account not found, please attempt to sign in again.")
+          /*this.$router.push(`/${name: login}`); */
+        }
+      });
+    }
+  }
 }
 
 </script>

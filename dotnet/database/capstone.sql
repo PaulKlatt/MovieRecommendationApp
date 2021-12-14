@@ -44,3 +44,32 @@ INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg4
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('admin','YhyGVQ+Ch69n4JMBncM4lNF/i9s=', 'Ar/aB2thQTI=','admin');
 
 GO
+
+--Delete user---------------------------------------------------------
+Select *
+From dbo.users
+
+Select *
+From genres_users
+
+Insert Into dbo.users (username, password_hash, salt, user_role)
+Values ('Kevin', 'j', 'A', 'user')
+
+Begin Transaction;
+Delete From dbo.users
+where user_id = '3'
+Commit;
+
+
+Select *
+From genres_users
+
+Insert Into dbo.users (username, password_hash, salt, user_role)
+Values ('Kevin', 'j', 'A', 'user')
+
+Begin Transaction;
+Delete From dbo.users
+where user_id = '3'
+Commit;
+
+----------------------------------------------------------------------
