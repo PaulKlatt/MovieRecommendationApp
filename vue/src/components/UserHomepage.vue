@@ -104,4 +104,10 @@ export default {
 ul {
   list-style-type: none;
 }
+img{
+  max-width: 100px;
+  height: 200px;
+}
+
+
 </style>
