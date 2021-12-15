@@ -17,7 +17,7 @@
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
           <li v-if="suggestedMovie.posterPath" id="movieTitle"> {{ suggestedMovie.title }}</li>
-          <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
+          <li ><img id="homepagePoster" v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
            <li v-if="!suggestedMovie.posterPath"><p>Sorry, no poster found for this movie.</p><img id="posterNotFound" src="https://previews.123rf.com/images/lineartestpilot/lineartestpilot1802/lineartestpilot180205606/94855861-cartoon-cat-shrugging-shoulders.jpg?fj=1" /></li>
           <li id="releaseDate">Release Date: {{ suggestedMovie.releaseDate }}</li>
           <li id="movieOverview"> {{ suggestedMovie.overview }}</li>
@@ -128,6 +128,20 @@ export default {
 <style>
 ul {
   list-style-type: none;
+}
+#movieTitle{
+  color: #f67280;
+  
+}
+#homepagePoster{
+  width: 30%;
+  height: 50%;
+}
+#releaseDate{
+  color: #f67280;
+}
+#movieOverview{
+  color: #f8b195;
 }
 
 #findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft {

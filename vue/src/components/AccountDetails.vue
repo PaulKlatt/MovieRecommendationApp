@@ -1,10 +1,11 @@
 <template>
   <div class="account-details" >
-    <h1>Account Details</h1>
+    <h1>{{ currentUser.username }}'s account</h1>
     <div id="user-account">
-      <h3>Username: {{ currentUser.username }}</h3>
-      <h3>{{ currentUser.role === 'user' ? 'Favorite' : 'Banned' }} Movies: </h3>
+      <!-- <h3>Username: {{ currentUser.username }}</h3> -->
+      <h3>{{ currentUser.role === 'user' ? '' : 'Banned Movies' }}  </h3>
        <div id="movie-details" v-if="moviesToView">
+         <!--
         <table>
           <tr>
             <th>Title</th>
@@ -24,6 +25,13 @@
             <td>{{ GenreNames(movie.genreIds) }}</td>
           </tr>
         </table>
+        -->
+        <ul id="accountMovieCard" v-for="movie in moviesToView" v-bind:key='movie.movieid'>
+          <li id="accountMoviePoster" v-if="currentUser.role === 'user' "> <img class="poster" v-if="movie.posterPath" v-bind:src="'https://image.tmdb.org/t/p/original' + movie.posterPath" /></li>
+          <li id="accountMovieTitle">{{ movie.title }}</li>
+          <li id="accountMovieId">ID: {{ movie.movieId }}</li>
+          <li id="accountMovieGenre"> {{ GenreNames(movie.genreIds) }}</li>
+          </ul>
        </div>
     </div>
   </div>
@@ -76,14 +84,50 @@ export default {
 <style>
 
 .poster {
-  width:15%;
-  height: 20%;
+  width: 75%;
+  height: 90%;
   margin: auto;
+  display: block;
 }
 
-th, td {
-  border: 1px solid black;
+
+#accountMovieTitle{
+  color: #f67280;
+  font-size: 25px;
   text-align: center;
-  vertical-align: middle;
+  
+  
 }
+#accountMovieGenre{
+  color: #f8b195;
+  text-align: center;
+}
+#accountMovieId{
+  color: #f8b195;
+  text-align: center;
+}
+#movie-details{
+  display: grid;
+  grid-template-columns: 1fr, 1fr, 1fr;
+  gap: 50px;
+  
+  justify-items: center;
+  margin-right: 10px;
+  grid-template-areas:
+  "movie movie movie"
+}
+
+ul{
+  grid-area: "movie"
+}
+
+@media screen and (max-width: 768px){
+  #movie-details{
+    grid-template-areas:
+    "movie";
+    grid-template-columns: 1fr;
+  }
+  
+}
+
 </style>
