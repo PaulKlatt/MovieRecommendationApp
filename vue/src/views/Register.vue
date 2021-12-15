@@ -81,7 +81,7 @@
                   <td>
                   </td>
                   <td>
-                    <router-link :to="{ name: 'login' }">Have an account?</router-link>
+                    <router-link id="haveAccountLink" :to="{ name: 'login' }">Have an account?</router-link>
                   </td>
 
                 </tr>
@@ -163,10 +163,16 @@ export default {
 
 #passwordMsg{
   font-size: 10px;
+  color: #f67280;
 }
 
 #usernameMsg{
   font-size: 10px;
+  color: #f67280;
+}
+#haveAccountLink{
+  text-decoration: none;
+  color: #f8b195;
 }
 
 

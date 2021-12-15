@@ -16,10 +16,11 @@
       <button v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
-          <li>Title: {{ suggestedMovie.title }}</li>
+          <li id="movieTitle"> {{ suggestedMovie.title }}</li>
           <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
-          <li>Overview: {{ suggestedMovie.overview }}</li>
-          <li>Release Date: {{ suggestedMovie.releaseDate }}</li>
+          <li id="releaseDate">Release Date: {{ suggestedMovie.releaseDate }}</li>
+          <li id="movieOverview"> {{ suggestedMovie.overview }}</li>
+          
         </ul>
       </div>
     </div>
@@ -105,8 +106,22 @@ ul {
   list-style-type: none;
 }
 img{
-  max-width: 100px;
-  height: 200px;
+  max-width: 300px;
+  height: 500px;
+  
+}
+#movieTitle{
+  color: #f67280;
+  font-size: 20px;
+  
+  
+}
+#releaseDate{
+  color: #f67280;
+}
+#movieOverview{
+  color: #f8b195;
+  max-width: 300px;
 }
 
 

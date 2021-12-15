@@ -44,6 +44,7 @@ namespace Capstone.Controllers
             }
         }
 
+
         [HttpPost("{userId}/exclude")]
         public IActionResult SaveToExcluded(MovieToExclude movie)
         {
@@ -59,7 +60,7 @@ namespace Capstone.Controllers
                 movie.RemovalTracker = 0;
             }
             bool isCreated = userDao.SaveToExcluded(movie);
-            
+
             if (isCreated)
             {
                 // Might need to be in a transaction inside SaveToExcluded, but should work for now
@@ -71,12 +72,41 @@ namespace Capstone.Controllers
             {
                 result = BadRequest(new { message = $"An error occurred and the movie was not added to the {movie.Opinion} list." });
             }
-           
+
 
             return result;
         }
+        [HttpPost("{userId}")]
+
+        public IActionResult UpdateUserPassword(LoginUser userParam)
+        {
+            IActionResult result = Unauthorized(new { message = "Password is incorrect" });
+
+            User user = userDao.GetUser(userParam.Username);
+
+            if (user != null && passwordHasher.VerifyHashMatch(user.PasswordHash, userParam.Password, user.Salt))
+            {
+                result = Ok();
+            }
+            return result;
+        }
+
+        [HttpPut("update")]
+
+        public ActionResult<RegisterUser> UpdateUserPassword(RegisterUser user)
+        {
+            User newUser = userDao.GetUser(user.Username);
+            // Update password - takes in user object (user.password)
+            // Put user into update password
+
+            if (newUser == null)
+            {
+                return Conflict(new { message = "User not found, please log in again." });
+            }
+
+            userDao.UpdatePassword(user);
+            return Ok();
+
+        }
     }
-
-
 }
-

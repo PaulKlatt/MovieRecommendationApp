@@ -45,6 +45,9 @@ namespace Capstone.Controllers
             return result;
         }
 
+      
+
+
         [HttpPost("/register")]
         public IActionResult Register(RegisterUser userParam)
         {
