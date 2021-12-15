@@ -44,6 +44,34 @@ namespace Capstone.DAO
             return returnUser;
         }
 
+        //public RegisterUser GetRegisterUser(string username)
+        //{
+        //    RegisterUser returnUser = null;
+
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+
+        //            SqlCommand cmd = new SqlCommand("SELECT user_id, username, password_hash, salt, user_role FROM users WHERE username = @username", conn);
+        //            cmd.Parameters.AddWithValue("@username", username);
+        //            SqlDataReader reader = cmd.ExecuteReader();
+
+        //            if (reader.Read())
+        //            {
+        //                returnUser = GetRegisterUserFromReader(reader);
+        //            }
+        //        }
+        //    }
+        //    catch (SqlException)
+        //    {
+        //        throw;
+        //    }
+
+        //    return returnUser;
+        //}
+
         public User AddUser(string username, string password, string role)
         {
             IPasswordHasher passwordHasher = new PasswordHasher();
@@ -116,6 +144,7 @@ namespace Capstone.DAO
 
             return returnUser;
         }
+
         public void DeleteUser(int userId)
         {
             try
@@ -124,7 +153,7 @@ namespace Capstone.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("Delete From users_excludedMovies where dbo.users_excludedMovies.user_id = @userId "+ 
+                    SqlCommand cmd = new SqlCommand("Delete From users_excludedMovies where dbo.users_excludedMovies.user_id = @userId " +
                                                     "Delete From dbo.users where user_id = @userId", conn);
                     cmd.Parameters.AddWithValue("@userId", userId);
                     cmd.ExecuteNonQuery();
@@ -134,85 +163,33 @@ namespace Capstone.DAO
             {
                 throw;
             }
-   
+
         }
 
 
-        /* public ReturnUser Adduser(int userId, List<string> favoriteGenres, string profileName)
-         {
-             int newuserId;
-             try
-             {
-                 using (SqlConnection conn = new SqlConnection(connectionString))
-                 {
-                     conn.Open();
+        //public void UpdateUser (User user)
+        //{
+        //    try
+        //    {
+        //        using(SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+        //            SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, user_role = @user_role where user_id = @user_id", conn);
+        //            cmd.Parameters.AddWithValue("@password_hash", user.PasswordHash);
+        //            cmd.Parameters.AddWithValue("@username", user.Username);
+        //            cmd.Parameters.AddWithValue("@salt", user.Salt);
+        //            cmd.Parameters.AddWithValue("@user_role", user.Role);
 
-                     SqlCommand cmd = new SqlCommand("INSERT INTO users (users.userId, favoriteGenres) OUTPUT INSERTED.userId VALUES (@users.userId, @favoriteGenres, @profileName)", conn);
-                     cmd.Parameters.AddWithValue("@users.userId", userId);
-                     cmd.Parameters.AddWithValue("@favoriteGenres", favoriteGenres);
-                     cmd.Parameters.AddWithValue("@profileName", profileName);
-                     newuserId = Convert.ToInt32(cmd.ExecuteScalar());
-                 }
-             }
-             catch (SqlException)
-             {
-                 throw;
-             }
+        //            cmd.ExecuteNonQuery();
+        //        }
 
-             return Getuser(newuserId);
-         }
-        */
-        private User GetUserFromReader(SqlDataReader reader)
-        {
-            User u = new User()
-            {
-                UserId = Convert.ToInt32(reader["user_id"]),
-                Username = Convert.ToString(reader["username"]),
-                PasswordHash = Convert.ToString(reader["password_hash"]),
-                Salt = Convert.ToString(reader["salt"]),
-                Role = Convert.ToString(reader["user_role"]),
-            };
+        //    }
+        //    catch (SqlException)
+        //    {
+        //        throw;
+        //    }
+        //}
 
-            return u;
-        }
-
-        private ReturnUser GetReturnUserFromReader(SqlDataReader reader)
-        {
-            ReturnUser userFromReader = new ReturnUser()
-            {
-                UserId = Convert.ToInt32(reader["user_id"]),
-                Username = Convert.ToString(reader["username"]),
-                Role = Convert.ToString(reader["user_role"]),
-            };
-
-            return userFromReader;
-        }
-        public User UpdatePassword(RegisterUser user)
-        {
-            IPasswordHasher passwordHasher = new PasswordHasher();
-            PasswordHash hash = passwordHasher.ComputeHash(user.Password);
-
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-
-                    SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, user_role = @user_role WHERE username = @username", conn);
-                    cmd.Parameters.AddWithValue("@username", user.Username);
-                    cmd.Parameters.AddWithValue("@password_hash", hash.Password);
-                    cmd.Parameters.AddWithValue("@salt", hash.Salt);
-                    cmd.Parameters.AddWithValue("@user_role", user.Role);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (SqlException)
-            {
-                throw;
-            }
-
-            return GetUser(user.Username);
-        }
 
         public bool SaveToExcluded(MovieToExclude movie)
         {
@@ -236,6 +213,7 @@ namespace Capstone.DAO
             }
             return true;
         }
+
         public bool UpdateRemovalTrackers(int userid)
         {
             try

@@ -16,9 +16,7 @@
       </form>
       <button>Modify Accounts</button>
       <loading class="loading" v-if="isLoading"/>
-
   </div>
- 
 </template>
 
 <script>
@@ -50,7 +48,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style>

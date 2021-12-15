@@ -49,16 +49,10 @@
 
 <script>
 import UpdatePassword from './UpdatePassword.vue'
-
 export default {
   components: { UpdatePassword },
-   data() {
-    return{
 
-    }
- }
 }
-
 </script>
 
 <style>

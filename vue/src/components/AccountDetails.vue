@@ -1,10 +1,10 @@
 <template>
   <div class="account-details" >
-    <h1>Account Details</h1>
+    <h1>{{ currentUser.username }}'s account</h1>
     <loading class="loading" v-if="isLoading"/>
-           <div id="user-account">
-      <h3>Username: {{ currentUser.username }}</h3>
-      <h3>{{ currentUser.role === 'user' ? 'Favorite' : 'Banned' }} Movies: </h3>
+    <div id="user-account">
+      <!-- <h3>Username: {{ currentUser.username }}</h3> -->
+      <h3>{{ currentUser.role === 'user' ? '' : 'Banned Movies' }}  </h3>
        <div id="movie-details" v-if="moviesToView">
          <!--
         <table>
@@ -35,21 +35,18 @@
           </ul>
        </div>
     </div>
-      
-
-  <div> 
+    <div> 
     <button v-on:click="DeleteActiveUser">Delete Account</button>
     </div>
-        
   </div>
 </template>
 
 <script>
-//import userService from "../services/UserService";
+import userService from "../services/UserService";
 import movieService from "../services/MovieService";
 import loading from '../components/Loading';
 export default {
-  components: { loading },
+components: { loading },
   data() {
     return{
       currentUser: this.$store.state.user,
@@ -58,27 +55,6 @@ export default {
     } 
   },
 
-  methods: {
-    GenreNames(genreString) {
-      const containedGenreIds = genreString.split('|');
-      const allGenreList = this.$store.state.genres
-      let containedGenreNames = '';
-      containedGenreIds.forEach( cId => {
-        allGenreList.forEach( genreItem => {
-          if (cId == genreItem.id){
-            if (containedGenreNames != ''){
-              containedGenreNames = containedGenreNames + ", " + genreItem.name;
-            }else {
-              containedGenreNames = genreItem.name;
-            }
-            
-          }
-        })
-      })
-      return containedGenreNames;
-    }
-  },
-  
   methods: {
     getActiveUser() {
       this.isLoading = true;
@@ -112,8 +88,27 @@ export default {
        });
 
       }
+    },
+    GenreNames(genreString) {
+      const containedGenreIds = genreString.split('|');
+      const allGenreList = this.$store.state.genres
+      let containedGenreNames = '';
+      containedGenreIds.forEach( cId => {
+        allGenreList.forEach( genreItem => {
+          if (cId == genreItem.id){
+            if (containedGenreNames != ''){
+              containedGenreNames = containedGenreNames + ", " + genreItem.name;
+            }else {
+              containedGenreNames = genreItem.name;
+            }
+            
+          }
+        })
+      })
+      return containedGenreNames;
     }
   },
+  
   created(){  
       movieService.findMoviesByUserId(this.$store.state.user.userId).then(response => {
         if (response.data != {}){

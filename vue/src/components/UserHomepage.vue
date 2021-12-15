@@ -2,7 +2,7 @@
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
       <button id="selectGenres" v-if="!showForm" v-on:click="ToggleForm">Select Genres</button>
-       <loading class="loading" v-if="isLoading"/>
+      <loading class="loading" v-if="isLoading"/>
       <form class="genre-form" v-if="!isLoading" v-on:submit.prevent='GetRandomMovie()'>
         <div v-show="showForm">
         <label for="genres">Choose the genres you would like to browse</label><br/>
@@ -36,16 +36,14 @@ import loading from '../components/Loading';
 
 export default {
   components: { loading },
-
   data() {
     return {
       genres: [],
       selected_genre_objects: [],
       suggestedMovie: false,
+      currentUser: false,
       sameGenres: false,
-      currentUser: false,
       isLoading: true,
-      currentUser: false,
       showForm: false
       //bind selected genres to the checkboxes
     }
@@ -54,6 +52,7 @@ export default {
     // call the genres service? or maybe its movie service? to find the available genres
     // and then loop through them to give options
     this.genres = this.$store.state.genres;
+    this.isLoading = false;
   },
   computed: {
     queryString() {
@@ -89,8 +88,7 @@ export default {
   methods: {
     GetRandomMovie(){
       this.isLoading= true;
-
-           movieService.getRandomMovie(this.queryString + "/users/" + this.$store.state.user.userId).then( response => {
+      movieService.getRandomMovie(this.queryString + "/users/" + this.$store.state.user.userId).then( response => {
         this.suggestedMovie = response.data;
         this.isLoading= false; 
     }).catch ( error => {
@@ -163,6 +161,7 @@ export default {
 ul {
   list-style-type: none;
 }
+
 .loading {
   display: flex;
   margin: auto;

@@ -2,7 +2,7 @@
     <div class='updatePassword'>
     <h3>reset your password:</h3>
     <loading class="loading" v-if="isLoading"/>
-    <button class= 'updatePassword' v-on:click.prevent="showForm = true" v-if="!showForm">click here to update password</button>
+    <button id= 'updatePassword' v-on:click.prevent="showForm = true" v-if="!showForm">click here to update password</button>
     <form class='updatePassword' v-if="showForm === true" @submit.prevent="updatePassword">
       <div class="alert alert-danger" role="alert" v-if="passwordError">
                 {{ passwordErrorMsg }}
@@ -79,7 +79,7 @@ import userService from '../services/UserService';
 import loading from '../components/Loading';
 
 export default {
-  components: { loading },
+   components: { loading },
   name: "passwordForm",
   data() {
     return{
@@ -87,17 +87,16 @@ export default {
       user: {
         currentPassword: '',
         newPassword: '',
-        confirmNewPassword: ''
+        confirmNewPassword: '',
+        
       },
       passwordError: false,
       passwordErrorMsg: "error",
       isLoading: false
     };
   },
-
 methods: {
     updatePassword() {
-
       if (this.user.newPassword != this.user.confirmNewPassword) {
         this.passwordError = true;
         this.passwordErrorMsg = 'new password & confirm new password do not match';
@@ -117,14 +116,13 @@ methods: {
           password: this.user.newPassword,
           role: this.$store.state.user.role,
           confirmPassword: this.user.confirmNewPassword
-        
         }
         this.isLoading = true;
         userService
           .updatePassword(newUserAndPassword)
           .then((response) => {
             if (response.status == 200) {
-               this.isLoading = false;
+              this.isLoading = false;
               this.showForm = false 
               alert('your password has been updated')
               //query: { registration: 'success' },
@@ -144,7 +142,6 @@ methods: {
     }
 
 }
-
 }
 
 </script>

@@ -14,7 +14,6 @@
 import AdminHomepage from '../components/AdminHomepage.vue';
 import UserHomepage from '../components/UserHomepage.vue';
 
-
 export default {
   components: { AdminHomepage, UserHomepage },
   name: "home",

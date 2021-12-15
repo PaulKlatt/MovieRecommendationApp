@@ -7,10 +7,8 @@
 </template>
 
 <script>
-
-
 export default {
-  components: { loading },
+components: { loading },
   data() {
     return{
       isLoading: true
@@ -18,7 +16,6 @@ export default {
  }
 
 }
-
 </script>
 
 <style>
