@@ -2,7 +2,9 @@
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
       <h2>Choose the genres you would like to browse</h2>
-      <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
+      <loading class="loading" v-if="isLoading"/>
+
+      <form class="genre-form" v-if="!isLoading" v-on:submit.prevent='GetRandomMovie()'>
         <ul class="genres">
           <li v-for="genre in genres" v-bind:key='genre.id'>
             <input v-bind:name='genre.name' type='checkbox' v-bind:value='genre.id' v-model='selected_genre_ids' />
@@ -28,8 +30,10 @@
 <script>
 import movieService from '../services/MovieService';
 import userService from '../services/UserService';
+import loading from '../components/Loading.vue';
 
 export default {
+  components: { loading },
 
   data() {
     return {
@@ -37,7 +41,8 @@ export default {
       selected_genre_ids: [],
       suggestedMovie: false,
       sameGenres: false,
-      currentUser: false
+      currentUser: false,
+      isLoading: true
       //bind selected genres to the checkboxes
     }
   },
@@ -61,6 +66,7 @@ export default {
           /*this.$router.push(`/${name: login}`); */
         }
     });
+          this.isLoading = false;
   },
   computed: {
     queryString() {
@@ -69,21 +75,16 @@ export default {
   },
   methods: {
     GetRandomMovie(){
-      // do while loop, while its in exluded movies list
-      /*let randomPageNumber;
-        await movieService.getRandomPageNumber(this.queryString).then( response => {
-         randomPageNumber = response.data;
-        }).catch ( error => {
-      //ERROR HANDLING
-      console.log('Something messed up 1: ' + error)
-        }); 
-*/
+      this.isLoading= true;
+
       movieService.getRandomMovie(this.queryString + "/users/" + this.currentUser.userId).then( response => {
         this.suggestedMovie = response.data;
+        this.isLoading= false; 
     }).catch ( error => {
       //ERROR HANDLING
       console.log('Something messed up 2: ' + error)
-    });    
+    });
+   
     },
 
     SaveToExcluded(opinion){
@@ -103,5 +104,18 @@ export default {
 <style>
 ul {
   list-style-type: none;
+}
+.loading {
+  display: flex;
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  
+
+
+  
 }
 </style>

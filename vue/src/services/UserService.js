@@ -12,6 +12,9 @@ export default {
   
   saveToExcluded(id, movieId) {
     return axios.post(`users/${id}/exclude`, movieId)
+  },
+  deleteUser(id){
+    return axios.delete(`/users/${id}`)
   }
 
 }

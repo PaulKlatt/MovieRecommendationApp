@@ -61,7 +61,7 @@ namespace Capstone.Controllers
                 return NotFound("Account does not exist");
             }
         }
-    }
+    
 
 
         [HttpPost("{userId}/exclude")]

@@ -1,6 +1,7 @@
 <template>
     <div class='updatePassword'>
     <h3>Reset your password:</h3>
+    <loading class="loading" v-if="isLoading"/>
     <button class= 'updatePassword' v-on:click.prevent="showForm = true" v-if="!showForm">Click Here To Update Password</button>
     <form class='updatePassword' v-if="showForm === true" @submit.prevent="updatePassword">
       <div class="alert alert-danger" role="alert" v-if="passwordError">
@@ -75,8 +76,10 @@
 <script>
 
 import userService from '../services/UserService';
+import loading from '../components/Loading.vue';
 
 export default {
+  components: { loading },
   name: "passwordForm",
   data() {
     return{
@@ -85,25 +88,30 @@ export default {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
-        
       },
       passwordError: false,
-      passwordErrorMsg: "ugh"
+      passwordErrorMsg: "ugh",
+      isLoading: false
     };
   },
+
 methods: {
     updatePassword() {
+
       if (this.user.newPassword != this.user.confirmNewPassword) {
         this.passwordError = true;
         this.passwordErrorMsg = 'New Password & Confirm New Password do not match.';
+
       } 
       else if(this.user.newPassword.length < 8 || this.user.confirmNewPassword.length < 8){
         this.passwordError = true;
         this.passwordErrorMsg = 'Password must be at least 8 characters long';
+
       }
       else if(this.user.newPassword == this.user.confirmNewPassword && this.user.newPassword == this.user.currentPassword){
         this.passwordError = true;
         this.passwordErrorMsg = 'New password cannot be the same as the old password.';
+  
       }
 
       else {
@@ -112,11 +120,14 @@ methods: {
           password: this.user.newPassword,
           role: this.$store.state.user.role,
           confirmPassword: this.user.confirmNewPassword
+        
         }
+        this.isLoading = true;
         userService
           .updatePassword(newUserAndPassword)
           .then((response) => {
             if (response.status == 200) {
+               this.isLoading = false;
               this.showForm = false 
               alert('Your password has been updated')
               //query: { registration: 'success' },
@@ -136,6 +147,7 @@ methods: {
     }
 
 }
+
 }
 
 </script>

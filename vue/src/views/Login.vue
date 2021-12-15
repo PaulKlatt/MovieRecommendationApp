@@ -72,9 +72,10 @@ export default {
     return {
       user: {
         username: "",
-        password: ""
+        password: "",
       },
       invalidCredentials: false
+    
     };
   },
   methods: {
@@ -101,7 +102,6 @@ export default {
 </script>
 
 <style scoped>
-
 
 .description {
   text-align: center;

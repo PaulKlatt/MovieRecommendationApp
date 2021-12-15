@@ -187,5 +187,95 @@ namespace Capstone.DAO
 
             return userFromReader;
         }
+        public User UpdatePassword(RegisterUser user)
+        {
+            IPasswordHasher passwordHasher = new PasswordHasher();
+            PasswordHash hash = passwordHasher.ComputeHash(user.Password);
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("Update users Set password_hash = @password_hash, username = @username, salt = @salt, user_role = @user_role WHERE username = @username", conn);
+                    cmd.Parameters.AddWithValue("@username", user.Username);
+                    cmd.Parameters.AddWithValue("@password_hash", hash.Password);
+                    cmd.Parameters.AddWithValue("@salt", hash.Salt);
+                    cmd.Parameters.AddWithValue("@user_role", user.Role);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return GetUser(user.Username);
+        }
+
+        public bool SaveToExcluded(MovieToExclude movie)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("INSERT INTO users_excludedMovies (movie_id, user_Id, opinion, removal_tracker) VALUES (@movie_id, @user_id, @opinion, @removal_tracker)", conn);
+                    cmd.Parameters.AddWithValue("@movie_id", movie.MovieId);
+                    cmd.Parameters.AddWithValue("@user_id", movie.UserId);
+                    cmd.Parameters.AddWithValue("@opinion", movie.Opinion);
+                    cmd.Parameters.AddWithValue("@removal_tracker", movie.RemovalTracker);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            return true;
+        }
+        public bool UpdateRemovalTrackers(int userid)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("UPDATE users_excludedMovies SET removal_tracker = removal_tracker + 1 WHERE opinion = 'Passed' AND user_id = @user_id", conn);
+                    cmd.Parameters.AddWithValue("@user_id", userid);
+                    cmd.ExecuteNonQuery();
+
+                    SqlCommand cmd2 = new SqlCommand("DELETE FROM users_excludedMovies WHERE opinion = 'Passed' AND removal_tracker > 30", conn);
+                    cmd2.Parameters.AddWithValue("@user_id", userid);
+                    cmd2.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            return true;
+        }
+        public List<int> GetExcludedMoviesByUser(int userId)
+        {
+            List<int> excludedMovieIds = new List<int>();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT movie_id FROM dbo.users_excludedMovies WHERE user_id = @user_id", conn);
+                cmd.Parameters.AddWithValue("@user_Id", userId);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    excludedMovieIds.Add(Convert.ToInt32(reader["movie_id"]));
+                }
+            }
+            return excludedMovieIds;
+        }
+
     }
 }
