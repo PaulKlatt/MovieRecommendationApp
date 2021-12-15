@@ -1,6 +1,7 @@
 <template>
     <div class='updatePassword'>
     <h3>reset your password:</h3>
+    <loading class="loading" v-if="isLoading"/>
     <button id= 'updatePassword' v-on:click.prevent="showForm = true" v-if="!showForm">click here to update password</button>
     <form class='updatePassword' v-if="showForm === true" @submit.prevent="updatePassword">
       <div class="alert alert-danger" role="alert" v-if="passwordError">
@@ -75,8 +76,10 @@
 <script>
 
 import userService from '../services/UserService';
+import loading from '../components/Loading';
 
 export default {
+   components: { loading },
   name: "passwordForm",
   data() {
     return{
@@ -88,7 +91,8 @@ export default {
         
       },
       passwordError: false,
-      passwordErrorMsg: "error"
+      passwordErrorMsg: "error",
+      isLoading: false
     };
   },
 methods: {
@@ -113,10 +117,12 @@ methods: {
           role: this.$store.state.user.role,
           confirmPassword: this.user.confirmNewPassword
         }
+        this.isLoading = true;
         userService
           .updatePassword(newUserAndPassword)
           .then((response) => {
             if (response.status == 200) {
+              this.isLoading = false;
               this.showForm = false 
               alert('your password has been updated')
               //query: { registration: 'success' },
