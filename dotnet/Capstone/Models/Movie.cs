@@ -23,6 +23,8 @@ namespace Capstone.Models
         public string PosterPath { get; set; }
         
         public string ReleaseDate { get; set; }
+
+        public List<int> GenreIds { get; set; }
     }
 
     public class GenreList
@@ -42,6 +44,13 @@ namespace Capstone.Models
         public int PageNumber { get; set; }
     }
 
+    public class MovieInfo
+    {
+        public MovieCard MovieCard{get; set;}
+
+        public MovieToExclude MovieToExclude { get; set; }
+    }
+
     public class MovieToExclude
     {
         public int MovieId { get; set; }
@@ -51,5 +60,27 @@ namespace Capstone.Models
         public string Opinion { get; set; }
 
         public int RemovalTracker { get; set; }
+    }
+
+    public class MovieCard
+    {
+        public int MovieId { get; set; }
+
+        public string PosterPath { get; set; }
+
+        public string Title { get; set; }
+
+        public string GenreIds { get; set; }
+    }
+
+    public class MovieDump
+    {
+        public int Id { get; set; }
+
+        public string PosterPath { get; set; }
+
+        public string Title { get; set; }
+
+        public List<GenreDetails> Genres { get; set;}
     }
 }

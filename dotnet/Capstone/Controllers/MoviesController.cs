@@ -25,7 +25,7 @@ namespace Capstone.Controllers
         [HttpGet("genrelist/")]
         public ActionResult<GenreList> GetGenres()
         {
-            GenreList genreList;
+            GenreList genreList = new GenreList();
 
             genreList = movieDao.GetGenres();
 
@@ -59,7 +59,8 @@ namespace Capstone.Controllers
                 {
                     Random rnd = new Random();
                     int randomPage;
-                    if(firstPageMovieList.TotalPages < 500)
+                    if (firstPageMovieList.TotalPages < 500)
+
                     {
                         randomPage = rnd.Next(1, firstPageMovieList.TotalPages + 1);
                     }
@@ -67,8 +68,6 @@ namespace Capstone.Controllers
                     {
                         randomPage = rnd.Next(1, 501);
                     }
-                    
-                    
 
                     MovieResults randomPageMovieList = movieDao.GetRandomMoviePage(genreIds, randomPage);
 
@@ -79,7 +78,7 @@ namespace Capstone.Controllers
                     else
                     {
                         returnMovie = randomPageMovieList.Results[rnd.Next(0, randomPageMovieList.Results.Count - 1)];
-                        
+
                     }
 
                 }
@@ -106,24 +105,88 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet("genres/{genreIds}/page/{pageNumber}")]
-        public ActionResult<MovieResults> GetRandomMovie(string genreIds, int pageNumber)
+        [HttpGet("users/{userId}")]
+        public ActionResult<List<MovieCard>> GetMoviesByUserId(int userId)
         {
-            MovieResults movieList;
+            List<MovieCard> movieCardList = userDao.GetSavedMoviesByUserId(userId);           
 
-            movieList = movieDao.GetRandomMoviePage(genreIds, pageNumber);
-
-            if (movieList == null)
+            if (movieCardList.Count == 0)
             {
-                return NotFound("Movies not found");
+                return NotFound("No movies saved.");
             }
             else
             {
-
-                Random rnd = new Random();
-                Movie returnMovie = movieList.Results[rnd.Next(0, 20)];
-                return Ok(returnMovie);
+                return Ok(movieCardList);
             }
+        }
+
+        [HttpPost("users/{userId}")]
+        public IActionResult SaveFavoriteMovie(MovieInfo movieInfo, int userId)
+        {
+            IActionResult result;
+
+            ReturnUser existingUser = userDao.GetReturnUser(movieInfo.MovieToExclude.UserId);
+            if (existingUser == null)
+            {
+                return Conflict(new { message = "User not found.  Please log in and try again." });
+            }
+
+            bool isCreated = userDao.SaveMovieCard(movieInfo.MovieCard);
+
+            if (isCreated)
+            {
+                bool isExcluded = userDao.SaveToExcluded(movieInfo.MovieToExclude);
+                result = Created($"/users/{userId}/", null); //values aren't read on client
+            }
+
+            else
+            {
+                result = BadRequest(new { message = $"An error occurred and the movie was not added to the Favorite list." });
+            }
+
+
+            return result;
+        }
+
+        [HttpPost("{movieId}/users/{userId}/ban")]
+        public IActionResult BanMovie(int movieId, int userId)
+        {
+            IActionResult result;
+
+            MovieCard movieToBan = movieDao.GetMovieCardByMovieId(movieId);
+
+            if (movieToBan == null)
+            {
+                return Conflict(new { message = "Movie not found.  Please recheck the movie id and try again." });
+            }
+
+            MovieToExclude movieToExclude = new MovieToExclude()
+            {
+                MovieId = movieToBan.MovieId,
+
+                UserId = userId,
+
+                Opinion = "Banned",
+
+                RemovalTracker = 0
+            };
+            //probably want all this in a transaction
+            bool isDeleted = userDao.DeleteSavedMovie(movieId);
+            bool isCreated = userDao.SaveMovieCard(movieToBan);
+
+            if (isCreated)
+            {
+                bool isExcluded = userDao.SaveToExcluded(movieToExclude);
+                result = Created($"movies/{movieId}/users/{userId}/ban", null); //values aren't read on client
+            }
+
+            else
+            {
+                result = BadRequest(new { message = $"An error occurred and the movie was not added to the Banned list." });
+            }
+
+
+            return result;
         }
     }
 }

@@ -16,11 +16,12 @@
       <button id='swipeLeft' v-on:click='SaveToExcluded("Uninterested")'>swipe left (completely uninterested)</button>
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
-          <li id="movieTitle"> {{ suggestedMovie.title }}</li>
+          <li v-if="suggestedMovie.posterPath" id="movieTitle"> {{ suggestedMovie.title }}</li>
           <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
+           <li v-if="!suggestedMovie.posterPath"><p>Sorry, no poster found for this movie.</p><img id="posterNotFound" src="https://previews.123rf.com/images/lineartestpilot/lineartestpilot1802/lineartestpilot180205606/94855861-cartoon-cat-shrugging-shoulders.jpg?fj=1" /></li>
           <li id="releaseDate">Release Date: {{ suggestedMovie.releaseDate }}</li>
           <li id="movieOverview"> {{ suggestedMovie.overview }}</li>
-          
+          <li>Genres: {{ GenreNames(suggestedMovie.genreIds) }}</li>
         </ul>
       </div>
     </div>
@@ -37,7 +38,6 @@ export default {
       genres: [],
       selected_genre_ids: [],
       suggestedMovie: false,
-      sameGenres: false,
       currentUser: false
       //bind selected genres to the checkboxes
     }
@@ -45,41 +45,23 @@ export default {
   created() {
     // call the genres service? or maybe its movie service? to find the available genres
     // and then loop through them to give options
-    movieService.getGenres().then( response => {
-      this.genres = response.data.genres
-    }).catch ( error => {
-      //ERROR HANDLING
-      console.log('Something messed up' + error)
-    });
-
-    userService.getUser(this.$store.state.user.userId).then(response => {
-
-        if (response.status === 200 && response.data != null) {
-          this.currentUser = response.data;
-          /* maybe send them somewhere? */
-        } else {
-          alert("Account not found, please attempt to sign in again.")
-          /*this.$router.push(`/${name: login}`); */
-        }
-    });
+    this.genres = this.$store.state.genres;
   },
   computed: {
     queryString() {
-      return this.selected_genre_ids.join('|');
+      if (this.selected_genre_ids.length == 0)
+      {
+        return '*';
+
+      } else {
+        return this.selected_genre_ids.join('|');
+      }
+      
     }
   },
   methods: {
     GetRandomMovie(){
-      // do while loop, while its in exluded movies list
-      /*let randomPageNumber;
-        await movieService.getRandomPageNumber(this.queryString).then( response => {
-         randomPageNumber = response.data;
-        }).catch ( error => {
-      //ERROR HANDLING
-      console.log('Something messed up 1: ' + error)
-        }); 
-*/
-      movieService.getRandomMovie(this.queryString + "/users/" + this.currentUser.userId).then( response => {
+      movieService.getRandomMovie(this.queryString + "/users/" + this.$store.state.user.userId).then( response => {
         this.suggestedMovie = response.data;
     }).catch ( error => {
       //ERROR HANDLING
@@ -87,18 +69,60 @@ export default {
     });    
     },
 
-    SaveToExcluded(opinion){
-      const movieToExclude = {
-        MovieId: this.suggestedMovie.id,
-        UserId: this.currentUser.userId,
-        Opinion: opinion
-      }
-      userService.saveToExcluded(this.currentUser.userId, movieToExclude);
+    SaveToExcluded(opinionType){
 
-      this.GetRandomMovie();
-    }
+        const movieInfo = {
+          MovieCard: {
+            MovieId: this.suggestedMovie.id,
+            Title: this.suggestedMovie.title,
+            PosterPath: this.suggestedMovie.posterPath,
+            GenreIds: this.suggestedMovie.genreIds.join('|')
+          },
+          MovieToExclude: {
+            MovieId: this.suggestedMovie.id,
+            UserId: this.$store.state.user.userId,
+            Opinion: opinionType,
+            RemovalTracker: 0
+          }
+        }
+        userService.saveToExcluded(this.$store.state.user.userId, movieInfo);
+
+        this.GetRandomMovie();
+      },
+      swipeHandler(direction){ 
+        if(direction == 'right'){
+          this.SaveToExcluded("Passed");
+        } else if (direction == 'top'){
+          this.SaveToExcluded("Favorite");
+        } else if (direction == 'left'){
+          this.SaveToExcluded("Uninterested");
+        }
+        console.log(direction);
+      
+    },
+
+      GenreNames(genreArray) {
+        const allGenreList = this.$store.state.genres
+        let containedGenreNames = '';
+        genreArray.forEach( cId => {
+          allGenreList.forEach( genreItem => {
+            if (cId == genreItem.id){
+              if (containedGenreNames != ''){
+                containedGenreNames = containedGenreNames + ", " + genreItem.name;
+              }else {
+                containedGenreNames = genreItem.name;
+              }
+
+            }
+          })
+        })
+        return containedGenreNames;
+      }
   }
 }
+ 
+
+    
 </script>
 
 <style>
