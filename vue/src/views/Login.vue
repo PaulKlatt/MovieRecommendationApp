@@ -13,17 +13,18 @@
         v-if="invalidCredentials"
       >invalid username and password!</div>
       <div
+        id='successAlert'
         class="alert alert-success"
         role="alert"
         v-if="this.$route.query.registration"
-      >thank you for registering, please sign in.</div>
+      >thank you for registering, please sign in</div>
       <div>
         <label for="username" class="sr-only">username:</label>
         <input
           type="text"
           id="username"
           class="form-control"
-          placeholder="Username"
+          placeholder="username"
           v-model="user.username"
           required
           autofocus
@@ -35,7 +36,7 @@
           type="password"
           id="password"
           class="form-control"
-          placeholder="Password"
+          placeholder="password"
           v-model="user.password"
           required
         />
@@ -44,12 +45,8 @@
       <router-link id="toRegister" :to="{ name: 'register' }">need an account? </router-link> 
       </div>
       <div>
-      <button type="submit" style="background-color: #f67280; font-size: larger; 
-      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
-      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;
-      user-select: none; touch-action: manipulation;
-      box-shadow: 3px 3px #f8b195;
-      padding: 0.25em 0.5em;"
+      <button id='buttonSubmit' type="submit" 
+
       >sign in</button>
 
       </div>
@@ -64,6 +61,7 @@
 
 <script>
 import authService from "../services/AuthService";
+import movieService from "../services/MovieService";
 
 export default {
   name: "login",
@@ -85,7 +83,7 @@ export default {
           if (response.status == 200) {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
-            this.$router.push("/");
+            
           }
         })
         .catch(error => {
@@ -95,6 +93,19 @@ export default {
             this.invalidCredentials = true;
           }
         });
+      movieService
+        .getGenres()
+        .then( response => {
+          if (response.status == 200){
+            this.$store.commit('SET_GENRES', response.data.genres);
+            this.$router.push("/");
+          }
+        })
+        .catch ( error => {
+        //ERROR HANDLING
+        console.log('Something messed up' + error)
+        });
+      
     }
   }
 };
@@ -116,6 +127,26 @@ export default {
   align-items: center;
 }
 
+#successAlert {
+  color: #c06c84;
+}
+
+#buttonSubmit {
+  background-color: #f67280; font-size: larger; 
+      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
+      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;  
+      box-shadow: 3px 3px #f8b195;
+      padding: 0.25em 0.5em;
+      user-select: none; touch-action: manipulation;
+      cursor: pointer;
+}
+
+#buttonSubmit:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
 .form-signin * {
   margin: 10px 5px;
 }
@@ -123,7 +154,6 @@ export default {
 #toRegister {
   color: fushia;
 }
-
 
 #app-details {
   /* try to center this with login info? */

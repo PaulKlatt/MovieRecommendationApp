@@ -6,11 +6,19 @@ export default {
     return axios.get('/movies/genrelist')
   },
 
-  getRandomPageNumber(genreIds){
-   return axios.get(`/movies/genres/${genreIds}`)
+  getRandomMovie(queryEnd){
+    return axios.get(`/movies/genres/${queryEnd}`);
   },
 
-  getRandomMovie(queryEnd){
-    return axios.get(`/movies/genres/${queryEnd}`)
+  saveToFavorites(userId, movie){
+    return axios.post(`/movies/users/${userId}`, movie);
+  },
+
+  findMoviesByUserId(userId){
+    return axios.get(`/movies/users/${userId}`);
+  },
+
+  banMovie(movieId, userId){
+    return axios.post(`/movies/${movieId}/users/${userId}/ban`);
   }
 }

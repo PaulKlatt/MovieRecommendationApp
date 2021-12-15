@@ -46,36 +46,43 @@ namespace Capstone.Controllers
 
 
         [HttpPost("{userId}/exclude")]
-        public IActionResult SaveToExcluded(MovieToExclude movie)
+        public IActionResult SaveToExcluded(MovieInfo movieInfo)
         {
             IActionResult result;
 
-            ReturnUser existingUser = userDao.GetReturnUser(movie.UserId);
+            ReturnUser existingUser = userDao.GetReturnUser(movieInfo.MovieToExclude.UserId);
             if (existingUser == null)
             {
                 return Conflict(new { message = "User not found.  Please log in and try again." });
             }
-            if (movie.Opinion == "Passed")
-            {
-                movie.RemovalTracker = 0;
-            }
-            bool isCreated = userDao.SaveToExcluded(movie);
+            
+            bool isCreated = userDao.SaveToExcluded(movieInfo.MovieToExclude);
 
             if (isCreated)
             {
+                if (movieInfo.MovieToExclude.Opinion == "Favorite")
+                {
+                    bool isFavorited = userDao.SaveMovieCard(movieInfo.MovieCard);
+                }
+                else
+                {
+                    bool isUpdated = userDao.UpdateRemovalTrackers(movieInfo.MovieToExclude.UserId);
+                }
                 // Might need to be in a transaction inside SaveToExcluded, but should work for now
-                bool isUpdated = userDao.UpdateRemovalTrackers(movie.UserId);
-                result = Created($"{movie.UserId}/exclude", null); //values aren't read on client
+                
+                result = Created($"{movieInfo.MovieToExclude.UserId}/exclude", null); //values aren't read on client
             }
 
             else
             {
-                result = BadRequest(new { message = $"An error occurred and the movie was not added to the {movie.Opinion} list." });
+                result = BadRequest(new { message = $"An error occurred and the movie was not added to the {movieInfo.MovieToExclude.Opinion} list." });
             }
 
 
             return result;
         }
+    
+
         [HttpPost("{userId}")]
 
         public IActionResult UpdateUserPassword(LoginUser userParam)

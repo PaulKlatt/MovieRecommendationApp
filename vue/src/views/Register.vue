@@ -2,27 +2,34 @@
   <div id="register" class="text-center">
     <form class="form-register" @submit.prevent="register">
       <h1 class="h3 mb-3 font-weight-normal">Create Account</h1>
-      <div class="alert alert-danger" role="alert" v-if="registrationErrors">
-                {{ registrationErrorMsg }}
-               </div>
+      
       <table>
         <tbody>
           <tr>
             <td>
-              <label for="username" class="sr-only">Username</label>
+              <label for="username" class="sr-only">username: </label>
               </td>
               <td>
                   <input
                    type="text"
                    id="username"
                     class="form-control"
-                    placeholder="Username"
+                    placeholder="username"
                     v-model="user.username"
                     required
                     autofocus
                   />
                 </td>
             </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                <div class="alert alert-danger" id="usernameMsg" role="alert" v-if="registrationErrors">
+                {{ registrationErrorMsg }}
+               </div>
+              </td>
+              </tr>
             <tr>
               <td>
                 <label for="password" class="sr-only">Password</label>
@@ -32,7 +39,7 @@
                       type="password"
                       id="password"
                       class="form-control"
-                      placeholder="Password"
+                      placeholder="password"
                       v-model="user.password"
                       required
                     />
@@ -40,13 +47,23 @@
               </tr>
               <tr>
                 <td>
+                <label for="confirmPassword" class="sr-only">confirm password: </label>
+                </td>
+                <td>
+                  <div class="alert alert-danger" id ="passwordMsg" role="alert" v-if="passwordErrors">
+                {{ passwordErrorMsg }} </div>
+                </td>
+                </tr>
+              <tr>
+                <td>
+                  <label for="confirmPassword" class="sr-only">Confirm Password</label>
                 </td>
                 <td>
                   <input
                       type="password"
                       id="confirmPassword"
                       class="form-control"
-                      placeholder="Confirm Password"
+                      placeholder="confirm password"
                       v-model="user.confirmPassword"
                       required
                     />
@@ -56,8 +73,8 @@
                   <td>
                   </td>
                   <td>
-                     <button class="btn btn-lg btn-primary btn-block" type="submit">
-                      Create Account
+                     <button id='registerAccountButton' class="btn btn-lg btn-primary btn-block" type="submit">
+                      create account
                       </button>
                   </td>
                 </tr>
@@ -65,7 +82,7 @@
                   <td>
                   </td>
                   <td>
-                    <router-link :to="{ name: 'login' }">Have an account?</router-link>
+                    <router-link id="haveAccountLink" :to="{ name: 'login' }">Have an account?</router-link>
                   </td>
 
                 </tr>
@@ -95,17 +112,19 @@ export default {
       },
       registrationErrors: false,
       registrationErrorMsg: 'Username is already taken, please choose a unique name.',
+      passwordErrors: false,
+      passwordErrorMsg: "Password"
     };
   },
   methods: {
     register() {
       if (this.user.password != this.user.confirmPassword) {
-        this.registrationErrors = true;
-        this.registrationErrorMsg = 'Password & Confirm Password do not match.';
+        this.passwordErrors = true;
+        this.passwordErrorMsg = 'Password & Confirm Password do not match.';
       } else
        if(this.user.password.length < 8 || this.user.confirmPassword.length < 8){
-        this.registrationErrors = true;
-        this.registrationErrorMsg = 'Password must be at least 8 characters long';
+        this.passwordErrors = true;
+        this.passwordErrorMsg = 'Password must be at least 8 characters long';
       }
     
       
@@ -124,17 +143,17 @@ export default {
             const response = error.response;
             this.registrationErrors = true;
             if (response.status === 400) {
-              this.registrationErrorMsg = 'Bad request';
+              this.registrationErrorMsg = 'bad request';
             }
             if(response.status === 409){
-              this.registrationErrorMsg = "Username Already Exists";
+              this.registrationErrorMsg = "username already exists";
             }
           });
       }
     },
     clearErrors() {
       this.registrationErrors = false;
-      this.registrationErrorMsg = 'There were problems registering this user.';
+      this.registrationErrorMsg = 'there were problems registering this user';
     },
   },
 };
@@ -143,7 +162,40 @@ export default {
 
 <style>
 
-</style>>
+#passwordMsg{
+  font-size: 10px;
+  color: #f67280;
+}
+
+#usernameMsg{
+  font-size: 10px;
+  color: #f67280;
+}
+#haveAccountLink{
+  text-decoration: none;
+  color: #f8b195;
+}
+
+
+
+#registerAccountButton {
+  background-color: #f67280; font-size: larger; 
+      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
+      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;  
+      box-shadow: 3px 3px #f8b195;
+      padding: 0.25em 0.5em;
+      user-select: none; touch-action: manipulation;
+      cursor: pointer;
+}
+
+#registerAccountButton:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+
+</style>
 
 
 
