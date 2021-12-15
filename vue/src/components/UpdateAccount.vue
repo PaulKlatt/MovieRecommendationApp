@@ -3,7 +3,7 @@
       <h2>please enter any changes you want to make to your account</h2>
     <!-- need to be able to update database from here with account info --> 
     <form class="genre-form">
-        <label for="profile-name">profile name: </label>
+        <label id="profile-name">profile name: </label>
         <input name="profile-name" type="text"/>
         <h3>favorite genres:</h3> <!-- add some binding to the checkboxes so your favorites are already checked? -->
         <ul class="genres">
