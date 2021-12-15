@@ -2,13 +2,13 @@
   <div id="app">
     <div id="nav">
       <div v-if="$store.state.token != ''">
-        <router-link v-bind:to="{ name: 'home' }">Home</router-link>
+        <router-link v-bind:to="{ name: 'home' }">home</router-link>
       </div>
       <div v-if="$store.state.token != ''">
-        <router-link v-bind:to="{ name: 'account', params:{id: $store.state.user.userId} }" >Account</router-link>
+        <router-link v-bind:to="{ name: 'account', params:{id: $store.state.user.userId} }" >account</router-link>
       </div>
       <div v-if="$store.state.token != ''">
-        <router-link v-bind:to="{ name: 'logout' }" >Logout</router-link>
+        <router-link v-bind:to="{ name: 'logout' }" >logout</router-link>
       </div>
     </div>
     <router-view />

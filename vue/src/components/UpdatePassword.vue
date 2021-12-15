@@ -1,7 +1,7 @@
 <template>
     <div class='updatePassword'>
-    <h3>Reset your password:</h3>
-    <button class= 'updatePassword' v-on:click.prevent="showForm = true" v-if="!showForm">Click Here To Update Password</button>
+    <h3>reset your password:</h3>
+    <button id= 'updatePassword' v-on:click.prevent="showForm = true" v-if="!showForm">click here to update password</button>
     <form class='updatePassword' v-if="showForm === true" @submit.prevent="updatePassword">
       <div class="alert alert-danger" role="alert" v-if="passwordError">
                 {{ passwordErrorMsg }}
@@ -10,14 +10,14 @@
     <tbody>
       <tr>
         <td>
-    <label for="currentPassword">Current Password</label>
+    <label for="currentPassword">current password: </label>
         </td>
         <td>
     <input
                      type="password"
                      id="currentPassword"
                      class="form-control"
-                     placeholder="Current Password"
+                     placeholder="current password"
                      v-model="user.currentPassword"
                      required
     />
@@ -26,7 +26,7 @@
         <tr>
           <td>
 
-                    <label for="password">New Password</label>
+                    <label for="password">new password:</label>
           </td>
           <td>
 
@@ -34,7 +34,7 @@
                       type="password"
                       id="password"
                       class="form-control"
-                      placeholder="New Password"
+                      placeholder="new password"
                       v-model="user.newPassword"
                       required
     />
@@ -43,14 +43,14 @@
         <tr>
           <td>
 
-    <label for="password">Confirm New Password</label>
+    <label for="password">confirm new password: </label>
           </td>
           <td>
                       <input
                       type="password"
                       id="confirmPassword"
                       class="form-control"
-                      placeholder="Confirm New Password"
+                      placeholder="confirm new password"
                       v-model="user.confirmNewPassword"
                       required
                     />
@@ -61,8 +61,8 @@
             </td>
             <td>
               
-                     <button class="btn btn-lg btn-primary btn-block" type="submit">
-                      Update Password
+                     <button id='loginButton' class="btn btn-lg btn-primary btn-block" type="submit">
+                      update password
                       </button>
             </td>
             </tr>
@@ -88,22 +88,22 @@ export default {
         
       },
       passwordError: false,
-      passwordErrorMsg: "ugh"
+      passwordErrorMsg: "error"
     };
   },
 methods: {
     updatePassword() {
       if (this.user.newPassword != this.user.confirmNewPassword) {
         this.passwordError = true;
-        this.passwordErrorMsg = 'New Password & Confirm New Password do not match.';
+        this.passwordErrorMsg = 'new password & confirm new password do not match';
       } 
       else if(this.user.newPassword.length < 8 || this.user.confirmNewPassword.length < 8){
         this.passwordError = true;
-        this.passwordErrorMsg = 'Password must be at least 8 characters long';
+        this.passwordErrorMsg = 'password must be at least 8 characters long';
       }
       else if(this.user.newPassword == this.user.confirmNewPassword && this.user.newPassword == this.user.currentPassword){
         this.passwordError = true;
-        this.passwordErrorMsg = 'New password cannot be the same as the old password.';
+        this.passwordErrorMsg = 'new password cannot be the same as the old password';
       }
 
       else {
@@ -118,7 +118,7 @@ methods: {
           .then((response) => {
             if (response.status == 200) {
               this.showForm = false 
-              alert('Your password has been updated')
+              alert('your password has been updated')
               //query: { registration: 'success' },
             }
           })
@@ -126,10 +126,10 @@ methods: {
             const response = error.response;
             this.passwordError = true;
             if (response.status === 400) {
-              this.passwordErrorMsg = 'Bad request';
+              this.passwordErrorMsg = 'bad request';
             }
             if(response.status === 409){
-              this.passwordErrorMsg = "Username Already Exists";
+              this.passwordErrorMsg = "username already exists";
             }
           });
       }
@@ -139,3 +139,29 @@ methods: {
 }
 
 </script>
+
+<style scoped>
+
+#updatePassword, #loginButton {
+  background-color: #f67280; font-size: larger; 
+      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
+      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;  
+      box-shadow: 3px 3px #f8b195;
+      padding: 0.25em 0.5em;
+      user-select: none; touch-action: manipulation;
+      cursor: pointer;
+}
+
+#updatePassword:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+#loginButton:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+</style>
