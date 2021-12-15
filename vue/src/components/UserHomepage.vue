@@ -1,16 +1,15 @@
 <template>
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
-      <h2>Choose the genres you would like to browse</h2>
+     
       <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
-        <ul class="genres">
-          <li v-for="genre in genres" v-bind:key='genre.id'>
-            <input v-bind:name='genre.name' type='checkbox' v-bind:value='genre.id' v-model='selected_genre_ids' />
-            <label v-bind:for='genre.name'>{{ genre.name }}</label>
-          </li>
-        </ul>
+        <label for="genres">Choose the genres you would like to browse</label><br/>
+        <select name="genres" v-model='selected_genre_objects' multiple>
+          <option v-for="genre in genres" v-bind:key='genre.id' v-bind:value='genre.id'>{{genre.name}}</option>
+        </select><br/>
         <button type="submit">Find Random Movie!</button>
       </form>
+
       <button v-on:click='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
       <button v-on:click='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
       <button v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
@@ -30,11 +29,10 @@ import movieService from '../services/MovieService';
 import userService from '../services/UserService';
 
 export default {
-
   data() {
     return {
       genres: [],
-      selected_genre_ids: [],
+      selected_genre_objects: [],
       suggestedMovie: false,
       sameGenres: false,
       currentUser: false
@@ -64,7 +62,18 @@ export default {
   },
   computed: {
     queryString() {
-      return this.selected_genre_ids.join('|');
+      let genreIds = []
+      this.selected_genre_objects.forEach(element => {
+        genreIds.push(element) 
+      })
+      return genreIds.join('|');
+    },
+    genreNames() {
+      let genreNames = []
+      this.genres.forEach(element => {
+        genreNames.push(element.name)
+      })
+      return genreNames
     }
   },
   methods: {
@@ -101,7 +110,5 @@ export default {
 </script>
 
 <style>
-ul {
-  list-style-type: none;
-}
+
 </style>
