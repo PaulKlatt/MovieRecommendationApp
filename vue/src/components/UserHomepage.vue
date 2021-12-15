@@ -1,7 +1,6 @@
 <template>
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
-<<<<<<< HEAD
      
       <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
         <label for="genres">Choose the genres you would like to browse</label><br/>
@@ -14,21 +13,6 @@
       <button v-on:click='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
       <button v-on:click='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
       <button v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
-=======
-      <h2>choose the genres you would like to browse</h2>
-      <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
-        <ul class="genres">
-          <li v-for="genre in genres" v-bind:key='genre.id'>
-            <input v-bind:name='genre.name' type='checkbox' v-bind:value='genre.id' v-model='selected_genre_ids' />
-            <label v-bind:for='genre.name'>{{ genre.name }}</label>
-          </li>
-        </ul>
-        <button id='findMoviesRandom' type="submit">find random movie!</button>
-      </form>
-      <button id='swipeUp' v-on:click='SaveToExcluded("Favorite")'>swipe up (add to favorites)</button>
-      <button id='swipeRight' v-on:click='SaveToExcluded("Passed")'>swipe right (pass)</button>
-      <button id='swipeLeft' v-on:click='SaveToExcluded("Uninterested")'>swipe left (completely uninterested)</button>
->>>>>>> 108f61c4bd55581272e831cb31ba4079dbd83bb3
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
           <li v-if="suggestedMovie.posterPath" id="movieTitle"> {{ suggestedMovie.title }}</li>
@@ -63,30 +47,34 @@ export default {
   },
   computed: {
     queryString() {
-<<<<<<< HEAD
+      if (this.selected_genre_objects.length == 0)
+      {
+        return '*';
+
+      } else {
+        return this.selected_genre_objects.join('|');
+      }
+      
+    },
+    /*
+    queryString() {
       let genreIds = []
       this.selected_genre_objects.forEach(element => {
         genreIds.push(element) 
       })
+      if (genreIds == []){
+        return "*";
+      } else {
       return genreIds.join('|');
-    },
+      }
+    },*/
     genreNames() {
       let genreNames = []
       this.genres.forEach(element => {
         genreNames.push(element.name)
       })
       return genreNames
-=======
-      if (this.selected_genre_ids.length == 0)
-      {
-        return '*';
-
-      } else {
-        return this.selected_genre_ids.join('|');
-      }
-      
->>>>>>> 108f61c4bd55581272e831cb31ba4079dbd83bb3
-    }
+    },
   },
   methods: {
     GetRandomMovie(){
@@ -128,7 +116,7 @@ export default {
         }
         console.log(direction);
       
-    },
+      },
 
       GenreNames(genreArray) {
         const allGenreList = this.$store.state.genres
@@ -147,16 +135,15 @@ export default {
         })
         return containedGenreNames;
       }
+    }  
   }
-}
+
  
 
     
 </script>
 
 <style>
-<<<<<<< HEAD
-=======
 ul {
   list-style-type: none;
 }
@@ -195,7 +182,5 @@ ul {
   left: 5px;
 }
 
-
->>>>>>> 108f61c4bd55581272e831cb31ba4079dbd83bb3
 
 </style>
