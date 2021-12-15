@@ -1,18 +1,20 @@
 <template>
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
-     
+      <button id="selectGenres" v-if="!showForm" v-on:click="ToggleForm">Select Genres</button>
       <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
+        <div v-show="showForm">
         <label for="genres">Choose the genres you would like to browse</label><br/>
         <select name="genres" v-model='selected_genre_objects' multiple>
           <option v-for="genre in genres" v-bind:key='genre.id' v-bind:value='genre.id'>{{genre.name}}</option>
         </select><br/>
-        <button type="submit">Find Random Movie!</button>
+        </div>
+        <button id="findMoviesRandom" type="submit">Find Random Movie!</button>
       </form>
 
-      <button v-on:click='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
-      <button v-on:click='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
-      <button v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
+      <button id="swipeUp" v-on:click='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
+      <button id="swipeRight" v-on:click='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
+      <button id="swipeLeft" v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
           <li v-if="suggestedMovie.posterPath" id="movieTitle"> {{ suggestedMovie.title }}</li>
@@ -36,7 +38,8 @@ export default {
       genres: [],
       selected_genre_objects: [],
       suggestedMovie: false,
-      currentUser: false
+      currentUser: false,
+      showForm: false
       //bind selected genres to the checkboxes
     }
   },
@@ -83,7 +86,8 @@ export default {
     }).catch ( error => {
       //ERROR HANDLING
       console.log('Something messed up 2: ' + error)
-    });    
+    });
+    this.showForm = false;    
     },
 
     SaveToExcluded(opinionType){
@@ -117,7 +121,9 @@ export default {
         console.log(direction);
       
       },
-
+      ToggleForm() {
+        this.showForm = !this.showForm;
+      },
       GenreNames(genreArray) {
         const allGenreList = this.$store.state.genres
         let containedGenreNames = '';
@@ -148,7 +154,7 @@ ul {
   list-style-type: none;
 }
 
-#findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft {
+#findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft, #selectGenres {
   background-color: #f67280; font-size: larger; 
       color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
       line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;  
@@ -177,6 +183,12 @@ ul {
 }
 
 #swipeLeft:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+#selectGenres:active {
   box-shadow: 0px 0px 0px 0px;
   top: 5px;
   left: 5px;
