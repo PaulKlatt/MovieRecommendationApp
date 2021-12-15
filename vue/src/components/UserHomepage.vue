@@ -1,7 +1,7 @@
 <template>
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
-      <h2>Choose the genres you would like to browse</h2>
+      <h2>choose the genres you would like to browse</h2>
       <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
         <ul class="genres">
           <li v-for="genre in genres" v-bind:key='genre.id'>
@@ -9,11 +9,11 @@
             <label v-bind:for='genre.name'>{{ genre.name }}</label>
           </li>
         </ul>
-        <button type="submit">Find Random Movie!</button>
+        <button id='findMoviesRandom' type="submit">find random movie!</button>
       </form>
-      <button v-on:click='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
-      <button v-on:click='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
-      <button v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
+      <button id='swipeUp' v-on:click='SaveToExcluded("Favorite")'>swipe up (add to favorites)</button>
+      <button id='swipeRight' v-on:click='SaveToExcluded("Passed")'>swipe right (pass)</button>
+      <button id='swipeLeft' v-on:click='SaveToExcluded("Uninterested")'>swipe left (completely uninterested)</button>
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
           <li id="movieTitle"> {{ suggestedMovie.title }}</li>
@@ -105,24 +105,41 @@ export default {
 ul {
   list-style-type: none;
 }
-img{
-  max-width: 300px;
-  height: 500px;
-  
+
+#findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft {
+  background-color: #f67280; font-size: larger; 
+      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
+      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;  
+      box-shadow: 3px 3px #f8b195;
+      padding: 0.25em 0.5em;
+      user-select: none; touch-action: manipulation;
+      cursor: pointer;
 }
-#movieTitle{
-  color: #f67280;
-  font-size: 20px;
-  
-  
+
+#findMoviesRandom:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
 }
-#releaseDate{
-  color: #f67280;
+
+#swipeUp:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
 }
-#movieOverview{
-  color: #f8b195;
-  max-width: 300px;
+
+#swipeRight:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
 }
+
+#swipeLeft:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
 
 
 </style>
