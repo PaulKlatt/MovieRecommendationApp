@@ -5,7 +5,7 @@
     <form class="genre-form">
         <label id="profile-name">profile name: </label>
         <input name="profile-name" type="text"/>
-        <h3>favorite genres:</h3> <!-- add some binding to the checkboxes so your favorites are already checked? -->
+       <!-- <h3>favorite genres:</h3> add some binding to the checkboxes so your favorites are already checked? -->
         <ul class="genres">
             
           <li>
@@ -34,11 +34,7 @@
 
           </li>
         </ul>
-    <button type="submit" style="background-color: #f67280;
-      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
-      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;
-      user-select: none; touch-action: manipulation;
-      padding: 0.25em 0.5em;"
+    <button id="updateAccountInfo" type="submit"
     >Update Account Info</button>
 
     
