@@ -16,10 +16,11 @@
       <button id='swipeLeft' v-on:click='SaveToExcluded("Uninterested")'>swipe left (completely uninterested)</button>
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
-          <li>Title: {{ suggestedMovie.title }}</li>
+          <li id="movieTitle"> {{ suggestedMovie.title }}</li>
           <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
-          <li>Overview: {{ suggestedMovie.overview }}</li>
-          <li>Release Date: {{ suggestedMovie.releaseDate }}</li>
+          <li id="releaseDate">Release Date: {{ suggestedMovie.releaseDate }}</li>
+          <li id="movieOverview"> {{ suggestedMovie.overview }}</li>
+          
         </ul>
       </div>
     </div>

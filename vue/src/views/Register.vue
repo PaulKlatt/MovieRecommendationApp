@@ -1,10 +1,8 @@
 <template>
   <div id="register" class="text-center">
     <form class="form-register" @submit.prevent="register">
-      <h1 class="h3 mb-3 font-weight-normal">create account</h1>
-      <div class="alert alert-danger" role="alert" v-if="registrationErrors">
-                {{ registrationErrorMsg }}
-               </div>
+      <h1 class="h3 mb-3 font-weight-normal">Create Account</h1>
+      
       <table>
         <tbody>
           <tr>
@@ -25,7 +23,16 @@
             </tr>
             <tr>
               <td>
-                <label for="password" class="sr-only">password: </label>
+              </td>
+              <td>
+                <div class="alert alert-danger" id="usernameMsg" role="alert" v-if="registrationErrors">
+                {{ registrationErrorMsg }}
+               </div>
+              </td>
+              </tr>
+            <tr>
+              <td>
+                <label for="password" class="sr-only">Password</label>
                 </td>
                 <td> 
                     <input
@@ -41,6 +48,15 @@
               <tr>
                 <td>
                 <label for="confirmPassword" class="sr-only">confirm password: </label>
+                </td>
+                <td>
+                  <div class="alert alert-danger" id ="passwordMsg" role="alert" v-if="passwordErrors">
+                {{ passwordErrorMsg }} </div>
+                </td>
+                </tr>
+              <tr>
+                <td>
+                  <label for="confirmPassword" class="sr-only">Confirm Password</label>
                 </td>
                 <td>
                   <input
@@ -66,7 +82,7 @@
                   <td>
                   </td>
                   <td>
-                    <router-link :to="{ name: 'login' }">have an account?</router-link>
+                    <router-link id="haveAccountLink" :to="{ name: 'login' }">Have an account?</router-link>
                   </td>
 
                 </tr>
@@ -95,18 +111,20 @@ export default {
         role: 'user',
       },
       registrationErrors: false,
-      registrationErrorMsg: 'username is already taken, please choose a unique name',
+      registrationErrorMsg: 'Username is already taken, please choose a unique name.',
+      passwordErrors: false,
+      passwordErrorMsg: "Password"
     };
   },
   methods: {
     register() {
       if (this.user.password != this.user.confirmPassword) {
-        this.registrationErrors = true;
-        this.registrationErrorMsg = 'password & confirm password do not match';
+        this.passwordErrors = true;
+        this.passwordErrorMsg = 'Password & Confirm Password do not match.';
       } else
        if(this.user.password.length < 8 || this.user.confirmPassword.length < 8){
-        this.registrationErrors = true;
-        this.registrationErrorMsg = 'password must be at least 8 characters long';
+        this.passwordErrors = true;
+        this.passwordErrorMsg = 'Password must be at least 8 characters long';
       }
     
       
@@ -143,6 +161,22 @@ export default {
 </script>
 
 <style>
+
+#passwordMsg{
+  font-size: 10px;
+  color: #f67280;
+}
+
+#usernameMsg{
+  font-size: 10px;
+  color: #f67280;
+}
+#haveAccountLink{
+  text-decoration: none;
+  color: #f8b195;
+}
+
+
 
 #registerAccountButton {
   background-color: #f67280; font-size: larger; 
