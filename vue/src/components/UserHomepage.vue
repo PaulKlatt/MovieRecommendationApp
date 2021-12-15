@@ -2,7 +2,8 @@
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
       <button id="selectGenres" v-if="!showForm" v-on:click="ToggleForm">Select Genres</button>
-      <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
+      <loading class="loading" v-if="isLoading"/>
+      <form class="genre-form" v-if="!isLoading" v-on:submit.prevent='GetRandomMovie()'>
         <div v-show="showForm">
         <label for="genres">Choose the genres you would like to browse</label><br/>
         <select name="genres" v-model='selected_genre_objects' multiple>
@@ -31,14 +32,18 @@
 <script>
 import movieService from '../services/MovieService';
 import userService from '../services/UserService';
+import loading from '../components/Loading';
 
 export default {
+  components: { loading },
   data() {
     return {
       genres: [],
       selected_genre_objects: [],
       suggestedMovie: false,
       currentUser: false,
+      sameGenres: false,
+      isLoading: true,
       showForm: false
       //bind selected genres to the checkboxes
     }
@@ -47,6 +52,7 @@ export default {
     // call the genres service? or maybe its movie service? to find the available genres
     // and then loop through them to give options
     this.genres = this.$store.state.genres;
+    this.isLoading = false;
   },
   computed: {
     queryString() {
@@ -81,8 +87,10 @@ export default {
   },
   methods: {
     GetRandomMovie(){
+      this.isLoading= true;
       movieService.getRandomMovie(this.queryString + "/users/" + this.$store.state.user.userId).then( response => {
         this.suggestedMovie = response.data;
+        this.isLoading= false; 
     }).catch ( error => {
       //ERROR HANDLING
       console.log('Something messed up 2: ' + error)
@@ -152,6 +160,20 @@ export default {
 <style>
 ul {
   list-style-type: none;
+}
+
+.loading {
+  display: flex;
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  
+
+
+  
 }
 #movieTitle{
   color: #f67280;

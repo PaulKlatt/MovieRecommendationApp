@@ -44,6 +44,24 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpDelete("{userId}")]
+        public ActionResult DeleteAccountById(int userId)
+        {
+            userDao.DeleteUser(userId);
+
+            ReturnUser returnUser = null;
+            returnUser = userDao.GetReturnUser(userId);
+
+            if (returnUser == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound("Account does not exist");
+            }
+        }
+
 
         [HttpPost("{userId}/exclude")]
         public IActionResult SaveToExcluded(MovieInfo movieInfo)
