@@ -1,6 +1,5 @@
 <template>
   <div id="admin-homepage">
-<<<<<<< HEAD
       <button v-on:click="showForm = true">Ban Movie</button>
       <form v-if="showForm" v-on:submit.prevent="banMovie(movieIdToBan)">
         <div>
@@ -16,10 +15,6 @@
       </div>
       </form>
       <button>Modify Accounts</button>
-=======
-      <button id='addMovies'>add movies</button>
-      <button id='modifyAccount'>modify accounts</button>
->>>>>>> d8e9d885e6a11265317b865b266589f5f3ca3b37
   </div>
 </template>
 

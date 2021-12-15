@@ -11,31 +11,17 @@
         </ul>
         <button id='findMoviesRandom' type="submit">find random movie!</button>
       </form>
-<<<<<<< HEAD
-      <button v-on:click.stop='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
-      <button v-on:click.stop='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
-      <button v-on:click.stop='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
-      <div id="draggable-container" v-if="suggestedMovie" v-touch:swipe.stop="swipeHandler">
-        <ul>
-          <li>Title: {{ suggestedMovie.title }}</li>
-          <li>Movie Id: {{ suggestedMovie.id }}</li>
-          <li v-if="suggestedMovie.posterPath"><img  v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
-          <li v-if="!suggestedMovie.posterPath"><p>Sorry, no poster found for this movie.</p><img id="posterNotFound" src="https://previews.123rf.com/images/lineartestpilot/lineartestpilot1802/lineartestpilot180205606/94855861-cartoon-cat-shrugging-shoulders.jpg?fj=1" /></li>
-          <li>Overview: {{ suggestedMovie.overview }}</li>
-          <li>Release Date: {{ suggestedMovie.releaseDate }}</li>
-          <li>Genres: {{ GenreNames(suggestedMovie.genreIds) }}</li>
-=======
       <button id='swipeUp' v-on:click='SaveToExcluded("Favorite")'>swipe up (add to favorites)</button>
       <button id='swipeRight' v-on:click='SaveToExcluded("Passed")'>swipe right (pass)</button>
       <button id='swipeLeft' v-on:click='SaveToExcluded("Uninterested")'>swipe left (completely uninterested)</button>
       <div id="movie-details" v-if="suggestedMovie">
         <ul>
-          <li id="movieTitle"> {{ suggestedMovie.title }}</li>
+          <li v-if="suggestedMovie.posterPath" id="movieTitle"> {{ suggestedMovie.title }}</li>
           <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
+           <li v-if="!suggestedMovie.posterPath"><p>Sorry, no poster found for this movie.</p><img id="posterNotFound" src="https://previews.123rf.com/images/lineartestpilot/lineartestpilot1802/lineartestpilot180205606/94855861-cartoon-cat-shrugging-shoulders.jpg?fj=1" /></li>
           <li id="releaseDate">Release Date: {{ suggestedMovie.releaseDate }}</li>
           <li id="movieOverview"> {{ suggestedMovie.overview }}</li>
-          
->>>>>>> d8e9d885e6a11265317b865b266589f5f3ca3b37
+          <li>Genres: {{ GenreNames(suggestedMovie.genreIds) }}</li>
         </ul>
       </div>
     </div>
@@ -144,18 +130,6 @@ ul {
   list-style-type: none;
 }
 
-<<<<<<< HEAD
-
-
-img {
-  width: 50%;
-  height: 60%;
-}
-
-#draggable-container {
-  text-align: center;
-}
-=======
 #findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft {
   background-color: #f67280; font-size: larger; 
       color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
@@ -192,5 +166,4 @@ img {
 
 
 
->>>>>>> d8e9d885e6a11265317b865b266589f5f3ca3b37
 </style>
