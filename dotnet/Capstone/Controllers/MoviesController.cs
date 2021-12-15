@@ -58,7 +58,16 @@ namespace Capstone.Controllers
                 else
                 {
                     Random rnd = new Random();
-                    int randomPage = rnd.Next(1, firstPageMovieList.TotalPages + 1);
+                    int randomPage;
+                    if (firstPageMovieList.TotalPages < 500)
+                    {
+                        randomPage = rnd.Next(1, firstPageMovieList.TotalPages + 1);
+                    }
+                    else
+                    {
+                        randomPage = rnd.Next(1, 501);
+                    }
+                    
 
                     MovieResults randomPageMovieList = movieDao.GetRandomMoviePage(genreIds, randomPage);
 

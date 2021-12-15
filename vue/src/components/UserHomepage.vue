@@ -11,16 +11,18 @@
         </ul>
         <button type="submit">Find Random Movie!</button>
       </form>
-      <button v-on:click='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
-      <button v-on:click='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
-      <button v-on:click='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
-      <div id="movie-details" v-if="suggestedMovie">
+      <button v-on:click.stop='SaveToExcluded("Favorite")'>Swipe Up(Favorite)</button>
+      <button v-on:click.stop='SaveToExcluded("Passed")'>Swipe Right(Pass)</button>
+      <button v-on:click.stop='SaveToExcluded("Uninterested")'>Swipe Left(Completely Uninterested)</button>
+      <div id="draggable-container" v-if="suggestedMovie" v-touch:swipe.stop="swipeHandler">
         <ul>
           <li>Title: {{ suggestedMovie.title }}</li>
           <li>Movie Id: {{ suggestedMovie.id }}</li>
-          <li><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
+          <li v-if="suggestedMovie.posterPath"><img  v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
+          <li v-if="!suggestedMovie.posterPath"><p>Sorry, no poster found for this movie.</p><img id="posterNotFound" src="https://previews.123rf.com/images/lineartestpilot/lineartestpilot1802/lineartestpilot180205606/94855861-cartoon-cat-shrugging-shoulders.jpg?fj=1" /></li>
           <li>Overview: {{ suggestedMovie.overview }}</li>
           <li>Release Date: {{ suggestedMovie.releaseDate }}</li>
+          <li>Genres: {{ GenreNames(suggestedMovie.genreIds) }}</li>
         </ul>
       </div>
     </div>
@@ -87,13 +89,56 @@ export default {
         userService.saveToExcluded(this.$store.state.user.userId, movieInfo);
 
         this.GetRandomMovie();
+      },
+      swipeHandler(direction){ 
+        if(direction == 'right'){
+          this.SaveToExcluded("Passed");
+        } else if (direction == 'top'){
+          this.SaveToExcluded("Favorite");
+        } else if (direction == 'left'){
+          this.SaveToExcluded("Uninterested");
+        }
+        console.log(direction);
+      
+    },
+
+      GenreNames(genreArray) {
+        const allGenreList = this.$store.state.genres
+        let containedGenreNames = '';
+        genreArray.forEach( cId => {
+          allGenreList.forEach( genreItem => {
+            if (cId == genreItem.id){
+              if (containedGenreNames != ''){
+                containedGenreNames = containedGenreNames + ", " + genreItem.name;
+              }else {
+                containedGenreNames = genreItem.name;
+              }
+
+            }
+          })
+        })
+        return containedGenreNames;
       }
-    }
   }
+}
+ 
+
+    
 </script>
 
 <style>
 ul {
   list-style-type: none;
+}
+
+
+
+img {
+  width: 50%;
+  height: 60%;
+}
+
+#draggable-container {
+  text-align: center;
 }
 </style>

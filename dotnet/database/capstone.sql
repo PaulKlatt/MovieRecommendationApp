@@ -41,9 +41,13 @@ CREATE TABLE users_excludedMovies (
 	CONSTRAINT [FK_users_excludedMovies_users] FOREIGN KEY (user_id) references users (user_id)
 )
 
-CREATE TABLE favoriteMovieInfo (
+CREATE TABLE movieCards (
 	movie_id int NOT NULL,
+	title varchar(100) NOT NULL,
+	poster_path varchar(100),
+	genre_ids varchar(100)
 
+	CONSTRAINT [PK_movieCards] PRIMARY KEY (movie_id)
 )
 INSERT INTO dbo.genres (genre_id, genre_name)
 VALUES

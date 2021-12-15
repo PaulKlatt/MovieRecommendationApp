@@ -55,11 +55,8 @@ namespace Capstone.Controllers
             {
                 return Conflict(new { message = "User not found.  Please log in and try again." });
             }
-            if (movie.Opinion == "Passed")
-            {
-                movie.RemovalTracker = 0;
-            }
-            bool isCreated = userDao.SaveToExcluded(movie);
+            
+            bool isCreated = userDao.SaveToExcluded(movieInfo.MovieToExclude);
 
             if (isCreated)
             {

@@ -354,6 +354,7 @@ namespace Capstone.DAO
             };
 
             return movieCardFromReader;
+        }
         public User UpdatePassword(RegisterUser user)
         {
             IPasswordHasher passwordHasher = new PasswordHasher();

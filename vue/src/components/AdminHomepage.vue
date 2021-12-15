@@ -31,9 +31,11 @@ export default {
   methods: {
     banMovie(movieId){
       movieService.banMovie(movieId, this.$store.state.user.userId).then(response => {
-        if (response.status == 200)
+        if (response.status == 201)
         {
           alert("Movie banned successfully.")
+          this.showForm= false,
+          this.movieIdToBan= ""
         } else {
           //ERROR HANDLING
           alert("Error banning movie.")
