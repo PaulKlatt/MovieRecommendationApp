@@ -4,7 +4,7 @@
     <loading class="loading" v-if="isLoading"/>
     <div id="user-account">
       <!-- <h3>Username: {{ currentUser.username }}</h3> -->
-      <h3>{{ currentUser.role === 'user' ? '' : 'Banned Movies' }}  </h3>
+      <h3>{{ currentUser.role === 'user' ? '' : 'banned movies' }}  </h3>
        <div id="movie-details" v-if="moviesToView">
          <!--
         <table>
@@ -36,13 +36,13 @@
        </div>
     </div>
     <div> 
-    <button v-on:click="DeleteActiveUser">Delete Account</button>
+
     </div>
   </div>
 </template>
 
 <script>
-import userService from "../services/UserService";
+
 import movieService from "../services/MovieService";
 import loading from '../components/Loading';
 export default {
@@ -56,39 +56,7 @@ components: { loading },
   },
 
   methods: {
-    getActiveUser() {
-      this.isLoading = true;
-      userService.getUser(this.$store.state.user.userId).then(response => {
-        this.currentUser = response.data;
-        this.isLoading = false;
-
-        if (response.status === 200 && response.data != null) {
-          /* maybe send them somewhere? */
-        } else {
-          alert("Account not found, please attempt to sign in again.")
-          /*this.$router.push(`/${name: login}`); */
-        }
-      });
-      
-    },
-      /* Delete Account Attempt  */
-      DeleteActiveUser() {
-      const verification = confirm("Are you sure you want to delete your account? Press OK to proceed.")
-      if(verification){
-              this.isLoading = true;
-      userService.deleteUser(this.$store.state.user.userId).then(response => {        if (response.status === 204) {
-          /* maybe send them somewhere? */
-          alert("Account deleted successfully")
-          this.$store.commit("LOGOUT")
-          this.$router.push({ name: "login"})
-        } else {
-          alert("Account not found, please attempt to sign in again.")
-          /*this.$router.push(`/${name: login}`); */
-        }
-       });
-
-      }
-    },
+    
     GenreNames(genreString) {
       const containedGenreIds = genreString.split('|');
       const allGenreList = this.$store.state.genres
@@ -134,6 +102,7 @@ components: { loading },
   color: #f67280;
   font-size: 25px;
   text-align: center;
+  font-weight: bold;
   
   
 }
