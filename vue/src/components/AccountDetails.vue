@@ -3,30 +3,9 @@
     <h1>{{ currentUser.username }}'s account</h1>
     <loading class="loading" v-if="isLoading"/>
     <div id="user-account">
-      <!-- <h3>Username: {{ currentUser.username }}</h3> -->
       <h3>{{ currentUser.role === 'user' ? '' : 'Banned Movies' }}  </h3>
        <div id="movie-details" v-if="moviesToView">
-         <!--
-        <table>
-          <tr>
-            <th>Title</th>
-            <th>Movie Id</th>
-            <th v-if="currentUser.role === 'user' ">Movie Poster</th>
-            <th>Genres</th>
-          </tr>
-          <tr v-for="movie in moviesToView" v-bind:key='movie.movieid'>
-            <td>{{ movie.title }}</td>
-            <td> {{ movie.movieId }}</td>
-            <td v-if="currentUser.role === 'user' ">
-              <img class="poster" v-if="movie.posterPath" v-bind:src="'https://image.tmdb.org/t/p/original' + movie.posterPath" /></td>
-                <div v-if="!movie.posterPath">
-                  <p>Sorry, no poster found for this movie.</p>
-                  <img id="posterNotFound" src="https://previews.123rf.com/images/lineartestpilot/lineartestpilot1802/lineartestpilot180205606/94855861-cartoon-cat-shrugging-shoulders.jpg?fj=1" />
-                </div>
-            <td>{{ GenreNames(movie.genreIds) }}</td>
-          </tr>
-        </table>
-        -->
+        
         <ul id="accountMovieCard" v-for="movie in moviesToView" v-bind:key='movie.movieid'>
           <li id="accountMoviePoster" v-if="currentUser.role === 'user' "> <img class="poster" v-if="movie.posterPath" v-bind:src="'https://image.tmdb.org/t/p/original' + movie.posterPath" /></li>
           <li id="accountMovieTitle">{{ movie.title }}</li>
@@ -167,6 +146,22 @@ ul{
     grid-template-columns: 1fr;
   }
   
+}
+
+button {
+  background-color: #f67280; font-size: larger; 
+      color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
+      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;  
+      box-shadow: 3px 3px #f8b195;
+      padding: 0.25em 0.5em;
+      user-select: none; touch-action: manipulation;
+      cursor: pointer;
+}
+
+button:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
 }
 
 </style>

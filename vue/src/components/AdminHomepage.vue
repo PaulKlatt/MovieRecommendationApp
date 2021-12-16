@@ -14,7 +14,7 @@
         <button type="submit">Submit Movie To Ban</button>
       </div>
       </form>
-      <button>Modify Accounts</button>
+      <!--<button>Modify Accounts</button>-->
       <loading class="loading" v-if="isLoading"/>
   </div>
 </template>
@@ -29,17 +29,19 @@ export default {
     return {
       showForm: false,
       movieIdToBan: "",
-      isLoading: true
+      isLoading: false
     }
   },
   methods: {
     banMovie(movieId){
+      this.isLoading = true;
       movieService.banMovie(movieId, this.$store.state.user.userId).then(response => {
         if (response.status == 201)
         {
           alert("Movie banned successfully.")
           this.showForm= false,
           this.movieIdToBan= ""
+          this.isLoading = false;
         } else {
           //ERROR HANDLING
           alert("Error banning movie.")

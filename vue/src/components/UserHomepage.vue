@@ -2,12 +2,14 @@
     <div id="user-homepage">
       <!-- this might be its own component, ChooseGenres -->
       <div id="topStuff">
-        <h2>choose the genres you would like to browse</h2>
-        <button id="selectGenres" v-if="!showForm" v-on:click="ToggleForm">Select Genres</button>
-        <loading class="loading" v-if="isLoading"/>
+        <div v-if="!showForm">
+          <h2>choose the genres you would like to browse</h2>
+          <button id="selectGenres" v-on:click="ToggleForm">select genres</button>
+        </div>
         <form v-if="!isLoading" class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
+        
           <div v-show="showForm">
-            <label for="genres">Choose the genres you would like to browse</label><br/>
+            <label for="genres"><h2>choose the genres you would like to browse</h2></label><br/>
             <select name="genres" v-model='selected_genre_objects' multiple>
               <option v-for="genre in genres" v-bind:key='genre.id' v-bind:value='genre.id'>{{genre.name}}</option>
             </select><br/>
@@ -19,28 +21,30 @@
       <div id='swipeRight' v-if="suggestedMovie" v-on:click='SaveToExcluded("Passed")' href="#" class="arrow arrow-right">maybe later</div>
       <div id='swipeLeft' v-if="suggestedMovie" v-on:click='SaveToExcluded("Uninterested")' href="#" class="arrow arrow-left">uninterested</div>
       <section class="container">
+      <loading class="loading" v-if="isLoading"/>
       <Vue2InteractDraggable
-        :interact-out-of-sight-x-coordinate="1000"
-        :interact-out-of-sight-y-coordinate="1000"
-        :interact-max-rotation="15"
-        :interact-x-threshold="200"
-        :interact-y-threshold="200"
+        :interact-out-of-sight-x-coordinate="800"
+        :interact-out-of-sight-y-coordinate="800"
+        :interact-max-rotation="20"
+        :interact-x-threshold="300"
+        :interact-y-threshold="300"
+        :interact-lock-swipe-down='true'
         @draggedRight='draggedRight'
         @draggedLeft='draggedLeft'
         @draggedUp='draggedUp'
-        v-if='isVisible'
+        v-if='isVisible & !isLoading'
         class="card"
         id="card">
         <div class="card__main">
-          <div id="movie-details" v-if="suggestedMovie">
+          <div class="movie-card" v-if="suggestedMovie">
             <ul>
               <li id="movieTitle"> {{ suggestedMovie.title }}</li>
-              <li>Movie Id: {{ suggestedMovie.id }}
+              <li id="movieId"><span>movie id: </span>{{ suggestedMovie.id }}</li>
               <li v-if="suggestedMovie.posterPath"><img v-bind:src="'https://image.tmdb.org/t/p/original' + suggestedMovie.posterPath" /></li>
               <li v-if="!suggestedMovie.posterPath"><p>Sorry, no poster found for this movie.</p><img id="posterNotFound" src="https://previews.123rf.com/images/lineartestpilot/lineartestpilot1802/lineartestpilot180205606/94855861-cartoon-cat-shrugging-shoulders.jpg?fj=1" /></li>
-              <li id="releaseDate">Release Date: {{ suggestedMovie.releaseDate }}</li>
-              <li id="movieOverview"> {{ suggestedMovie.overview }}</li>
-              <li>Genres: {{ GenreNames(suggestedMovie.genreIds) }}</li>
+              <li id="releaseDate"><span>release date: </span>{{ suggestedMovie.releaseDate }}</li>
+              <li id="movieOverview"><span>overview: </span> {{ suggestedMovie.overview }}</li>
+              <li id ="genresInCard"><span>genres: </span>{{ GenreNames(suggestedMovie.genreIds) }}</li>
             </ul>
           </div>    
         </div>
@@ -88,18 +92,7 @@ export default {
       }
       
     },
-    /*
-    queryString() {
-      let genreIds = []
-      this.selected_genre_objects.forEach(element => {
-        genreIds.push(element) 
-      })
-      if (genreIds == []){
-        return "*";
-      } else {
-      return genreIds.join('|');
-      }
-    },*/
+
     genreNames() {
       let genreNames = []
       this.genres.forEach(element => {
@@ -110,7 +103,7 @@ export default {
   },
   methods: {
     GetRandomMovie(){
-      this.isLoading= true;
+      this.isLoading = true;
       movieService.getRandomMovie(this.queryString + "/users/" + this.$store.state.user.userId).then( response => {
         this.suggestedMovie = response.data;
         setTimeout(() => this.isVisible = false, 200)
@@ -127,7 +120,7 @@ export default {
     },
 
     SaveToExcluded(opinionType){
-
+       
         const movieInfo = {
           MovieCard: {
             MovieId: this.suggestedMovie.id,
@@ -193,8 +186,26 @@ ul {
   margin: auto;
 }
 
-#movie-details li {
+.movie-card li {
   width:90%;
+  color: #f8b195;
+}
+
+.movie-card li:not(#movieOverview){
+  text-align: center;
+}
+
+.movie-card span, #movieTitle {
+  color: #266DB6;
+  font-weight: bold;
+}
+
+#movieTitle {
+  font-size: 3rem;
+}
+
+button {
+  margin: 20px;
 }
 
 img {
@@ -204,33 +215,13 @@ img {
   height: 70%;
 }
 
-.loading {
-  display: flex;
-  margin: auto;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  justify-content: center;
-  align-content: center;
-  
 
-
-  
-}
-#movieTitle{
-  color: #f67280;
-  
-}
 #homepagePoster{
   width: 30%;
   height: 50%;
 }
-#releaseDate{
-  color: #f67280;
-}
-#movieOverview{
-  color: #f8b195;
-}
+
+
 
 #findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft, #selectGenres {
   background-color: #f67280; font-size: larger; 
@@ -240,7 +231,13 @@ img {
   padding: 0.25em 0.5em;
   user-select: none; touch-action: manipulation;
   cursor: pointer;
-  width:300px;
+  width: 250px;
+
+}
+
+#selectGenres, #findMoviesRandom {
+  display: block;
+  margin: 30px auto;
 }
 
 #findMoviesRandom:active {
@@ -281,7 +278,6 @@ img {
   left: 5px;
 }
 
-
 .arrow-top:before{
   position: absolute;
   top: -10px;
@@ -313,11 +309,15 @@ img {
     border-right: 20px solid #f67280; 
 }
 
-#movie-details {
+.movie-card, .loading {
   background-color: #f67280;
   width: 100%;
   margin: 20px auto;
   border-radius: 10%;
+}
+
+.loading {
+  padding: 10% 0;
 }
 
 #topStuff {
@@ -342,7 +342,7 @@ img {
 
 #user-homepage {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   grid-template-areas:". topStuff ."
                      ". swipeUp ."
                      "swipeLeft container swipeRight";
