@@ -1,12 +1,10 @@
 <template>
     <div class='updatePassword'>
-    <h3>reset your password:</h3>
+    
     <loading class="loading" v-if="isLoading"/>
     <button id= 'updatePassword' v-on:click.prevent="showForm = true" v-if="!showForm">click here to update password</button>
     <form class='updatePassword' v-if="showForm === true" @submit.prevent="updatePassword">
-      <div class="alert alert-danger" role="alert" v-if="passwordError">
-                {{ passwordErrorMsg }}
-               </div>
+      
     <table>
     <tbody>
       <tr>
@@ -41,6 +39,15 @@
     />
           </td>
         </tr>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <div class="alert alert-danger" role="alert" v-if="passwordError">
+                {{ passwordErrorMsg }}
+               </div>
+          </td>
+          </tr>
         <tr>
           <td>
 

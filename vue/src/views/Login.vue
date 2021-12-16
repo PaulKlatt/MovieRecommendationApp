@@ -130,6 +130,9 @@ export default {
 #successAlert {
   color: #c06c84;
 }
+#toRegister{
+  color: #f8b195;
+}
 
 #buttonSubmit {
   background-color: #f67280; font-size: larger; 

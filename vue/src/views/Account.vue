@@ -2,7 +2,7 @@
   <div>
       <account-details v-if="!showForm"/>
       <update-account v-if="showForm"/>
-      <button id="updateAccountInfo" v-if="!showForm" v-on:click="updateAccount()">Update Account Details</button>
+      <button id="updateAccountInfo" v-if="!showForm" v-on:click="updateAccount()">update account details</button>
   </div>
 </template>
 
