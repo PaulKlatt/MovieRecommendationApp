@@ -83,4 +83,25 @@ CREATE TABLE [genres_users] (
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('user','Jg45HuwT7PZkfuKTz6IB90CtWY4=','LHxP4Xh7bN0=','user');
 INSERT INTO users (username, password_hash, salt, user_role) VALUES ('admin','YhyGVQ+Ch69n4JMBncM4lNF/i9s=', 'Ar/aB2thQTI=','admin');
 
+--populate presentation data
+INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (96984, 'Pleasure Shop on the Avenue', '/lpwCNexA5N6gUZeXlR8bXv8ZCI1.jpg', '53')
+INSERT INTO users_excludedMovies (movie_id, user_id, opinion, removal_tracker) VALUES (96984, 2, 'Banned', 0)
+
+INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (22705, 'Cheeky', '/7gqcEgJfTltbLo76nZTl8umgM1Y.jpg', '35|18|10749')
+INSERT INTO users_excludedMovies (movie_id, user_id, opinion, removal_tracker) VALUES (22705, 2, 'Banned', 0)
+
+INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (463998, 'Paradise of Innocence', '/zavz3iYAOgBpE05UqamLmah0Tlj.jpg', '16')
+INSERT INTO users_excludedMovies (movie_id, user_id, opinion, removal_tracker) VALUES (463998, 2, 'Banned', 0)
+
+INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (26728, 'Garfield''s Fun Fest', '/zavz3iYAOgBpE05UqamLmah0Tlj.jpg', '35|16|10751')
+INSERT INTO users_excludedMovies (movie_id, user_id, opinion, removal_tracker) VALUES (26728, 1, 'Favorite', 0)
+
+INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (625404, 'Mother and Daughter: Full of Breast Milk', '/b8mYDyDYKuFrPxxrvqJXw3W0aj0.jpg', '16')
+INSERT INTO users_excludedMovies (movie_id, user_id, opinion, removal_tracker) VALUES (625404, 2, 'Banned', 0)
+
+INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (56202, 'Pettson and Findus', '/8mGYnUkthgdvs0ol6gyjqpNYCoe.jpg', '35|16|10751')
+INSERT INTO users_excludedMovies (movie_id, user_id, opinion, removal_tracker) VALUES (56202, 1, 'Favorite', 0)
+
+INSERT INTO movieCards (movie_id, title, poster_path, genre_ids) VALUES (16390, 'Scooby-Doo! and the Samurai Sword', '/qJ0UlWWrBn2fnAg4SifTJbDUuaf.jpg', '10751|9648|16|35|28|14')
+INSERT INTO users_excludedMovies (movie_id, user_id, opinion, removal_tracker) VALUES (16390, 1, 'Favorite', 0)
 GO

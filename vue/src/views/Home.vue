@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>home</h1>
+    <h1>catflix.</h1>
     <!--might want to put this as some v-if 
     <p>You must be authenticated to see this</p>
     -->
@@ -29,8 +29,10 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style>
+h1 {
+  text-align: center;
+}
 
 
 

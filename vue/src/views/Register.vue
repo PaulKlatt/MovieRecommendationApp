@@ -1,7 +1,9 @@
 <template>
   <div id="register" class="text-center">
+    <h1 class="h3 mb-3 font-weight-normal">create account</h1>
+    
     <form class="form-register" @submit.prevent="register">
-      <h1 class="h3 mb-3 font-weight-normal">Create Account</h1>
+      
       
       <table id="createAccountTable">
         <tbody>
@@ -82,7 +84,7 @@
                   <td>
                   </td>
                   <td>
-                    <router-link id="haveAccountLink" :to="{ name: 'login' }">Have an account?</router-link>
+                    <router-link id="haveAccountLink" :to="{ name: 'login' }">have an account?</router-link>
                   </td>
 
                 </tr>
@@ -111,20 +113,20 @@ export default {
         role: 'user',
       },
       registrationErrors: false,
-      registrationErrorMsg: 'Username is already taken, please choose a unique name.',
+      registrationErrorMsg: 'username is already taken, please choose a unique name.',
       passwordErrors: false,
-      passwordErrorMsg: "Password"
+      passwordErrorMsg: "password"
     };
   },
   methods: {
     register() {
       if (this.user.password != this.user.confirmPassword) {
         this.passwordErrors = true;
-        this.passwordErrorMsg = 'Password & Confirm Password do not match.';
+        this.passwordErrorMsg = 'password & confirm password do not match.';
       } else
        if(this.user.password.length < 8 || this.user.confirmPassword.length < 8){
         this.passwordErrors = true;
-        this.passwordErrorMsg = 'Password must be at least 8 characters long';
+        this.passwordErrorMsg = 'password must be at least 8 characters long';
       }
     
       
@@ -163,12 +165,12 @@ export default {
 <style>
 
 #passwordMsg{
-  font-size: 10px;
+  font-size: 16px;
   color: #f67280;
 }
 
 #usernameMsg{
-  font-size: 10px;
+  font-size: 16px;
   color: #f67280;
 }
 #haveAccountLink{
@@ -176,7 +178,12 @@ export default {
   color: #f8b195;
 }
 
-
+.form-register{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10%
+}
 
 #registerAccountButton {
   background-color: #f67280; font-size: larger; 
