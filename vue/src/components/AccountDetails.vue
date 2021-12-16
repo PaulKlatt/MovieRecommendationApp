@@ -3,12 +3,7 @@
     <h1>{{ currentUser.username }}'s account</h1>
     <loading class="loading" v-if="isLoading"/>
     <div id="user-account">
-<<<<<<< HEAD
-      <h3>{{ currentUser.role === 'user' ? '' : 'Banned Movies' }}  </h3>
-=======
-      <!-- <h3>Username: {{ currentUser.username }}</h3> -->
-      <h3>{{ currentUser.role === 'user' ? '' : 'banned movies' }}  </h3>
->>>>>>> ca50048923e104ad743828272984fef6893e105f
+      <h2 id='last'>{{ currentUser.role === 'user' ? '' : 'banned movies' }}  </h2>
        <div id="movie-details" v-if="moviesToView">
         
         <ul id="accountMovieCard" v-for="movie in moviesToView" v-bind:key='movie.movieid'>
@@ -136,6 +131,12 @@ button:active {
   box-shadow: 0px 0px 0px 0px;
   top: 5px;
   left: 5px;
+}
+
+#last {
+  text-align: center;
+  text-decoration: underline;
+  color: #f8b195;
 }
 
 </style>

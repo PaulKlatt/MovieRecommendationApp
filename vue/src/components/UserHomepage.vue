@@ -3,14 +3,14 @@
       <!-- this might be its own component, ChooseGenres -->
       <div id="topStuff">
         <div v-if="!showForm">
-          <h2>choose the genres you would like to browse</h2>
+          <h2 class='select'>choose the genres you would like to browse</h2>
           <button id="selectGenres" v-on:click="ToggleForm">select genres</button>
         </div>
         <form v-if="!isLoading" class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
         
-          <div v-show="showForm">
-            <label for="genres"><h2>choose the genres you would like to browse</h2></label><br/>
-            <select name="genres" v-model='selected_genre_objects' multiple>
+          <div  v-show="showForm">
+            <label class='select' for="genres"><h2>choose the genres you would like to browse</h2></label><br/>
+            <select class='select' name="genres" v-model='selected_genre_objects' multiple>
               <option v-for="genre in genres" v-bind:key='genre.id' v-bind:value='genre.id'>{{genre.name}}</option>
             </select><br/>
           </div>
@@ -188,7 +188,9 @@ ul {
 
 .movie-card li {
   width:90%;
-  color: #f8b195;
+  color: #6c5b7b;
+  font-weight: bold;
+;
 }
 
 .movie-card li:not(#movieOverview){
@@ -197,7 +199,7 @@ ul {
 
 .movie-card span, #movieTitle {
   color: #266DB6;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 #movieTitle {
@@ -207,6 +209,7 @@ ul {
 button {
   margin: 20px;
 }
+
 
 img {
   display: block;
@@ -221,7 +224,21 @@ img {
   height: 50%;
 }
 
+.select {
+  text-align: center;
+  display: block;
+  margin: auto;
+}
 
+select {
+    width: 300px;
+  height: 200px;
+}
+
+select option:checked, select option:hover, select option::selection {
+  background: #f67280;
+  color: white;
+}
 
 #findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft, #selectGenres {
   background-color: #f67280; font-size: larger; 

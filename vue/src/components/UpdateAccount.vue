@@ -1,59 +1,12 @@
 <template>
-  <div class="update-user">
-<<<<<<< HEAD
-      <h2>please enter any changes you want to make to your account</h2>
-    <!-- need to be able to update database from here with account info
-    <form class="genre-form">
-        <label id="profile-name">profile name: </label>
-        <input name="profile-name" type="text"/>
-       <h3>favorite genres:</h3> add some binding to the checkboxes so your favorites are already checked?
-        <ul class="genres">
-            
-          <li>
-            <input name="action" type="checkbox"/>
-            <label for="action">action</label>
-
-          </li>
-          <li>
-            <input name="romcom" type="checkbox"/>
-            <label for="romcom">romcom</label>
-
-          </li>
-          <li>
-            <input name="horror" type="checkbox"/>
-            <label for="horror">horror</label>
-
-          </li>
-          <li>
-            <input name="drama" type="checkbox"/>
-            <label for="drama">drama</label>
-
-          </li>
-          <li>
-            <input name="comedy" type="checkbox"/>
-            <label for="comedy">comedy</label>
-
-          </li>
-        </ul>
-    <button id="updateAccountInfo" type="submit"
-    >Update Account Info</button>
-
-    
-    </form>
-    -->
-=======
-      
-    <!-- need to be able to update database from here with account info --> 
-    
-    
->>>>>>> ca50048923e104ad743828272984fef6893e105f
+  <div>
+    <h1>update account</h1>
+    <img class = "bestcat" src="https://canary.contestimg.wish.com/api/webimage/5e1468224b7eec03c97f8915-large.jpg?cache_buster=085e00180f70ca62aa0f8a1c7d8e6bdb" />
+    <div class="update-user">
     <update-password id="passwordForm"/>  
     <button id="deleteButton" v-on:click="DeleteActiveUser">delete account</button>
-    
-
     </div>
-    
-  
+  </div>
 </template>
 
 <script>
@@ -102,9 +55,6 @@ getActiveUser() {
 
 <style>
 
-<<<<<<< HEAD
-
-=======
 #updateAccountInfo, #deleteButton {
   background-color: #f67280; font-size: larger; 
       color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
@@ -119,14 +69,13 @@ getActiveUser() {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 15%;
+  margin-top: 5%;
 }
 #updateAccountInfo:active {
   box-shadow: 0px 0px 0px 0px;
   top: 5px;
   left: 5px;
 }
->>>>>>> ca50048923e104ad743828272984fef6893e105f
 
 #deleteButton:active{
 box-shadow: 0px 0px 0px 0px;
@@ -134,4 +83,9 @@ box-shadow: 0px 0px 0px 0px;
   left: 5px;
 }
 
+.bestcat {
+  width: 400px;
+  height: 400px;
+  border: 10px solid #6c5b7b
+}
 </style>

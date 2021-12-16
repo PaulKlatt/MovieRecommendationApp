@@ -113,20 +113,20 @@ export default {
         role: 'user',
       },
       registrationErrors: false,
-      registrationErrorMsg: 'Username is already taken, please choose a unique name.',
+      registrationErrorMsg: 'username is already taken, please choose a unique name.',
       passwordErrors: false,
-      passwordErrorMsg: "Password"
+      passwordErrorMsg: "password"
     };
   },
   methods: {
     register() {
       if (this.user.password != this.user.confirmPassword) {
         this.passwordErrors = true;
-        this.passwordErrorMsg = 'Password & Confirm Password do not match.';
+        this.passwordErrorMsg = 'password & confirm password do not match.';
       } else
        if(this.user.password.length < 8 || this.user.confirmPassword.length < 8){
         this.passwordErrors = true;
-        this.passwordErrorMsg = 'Password must be at least 8 characters long';
+        this.passwordErrorMsg = 'password must be at least 8 characters long';
       }
     
       

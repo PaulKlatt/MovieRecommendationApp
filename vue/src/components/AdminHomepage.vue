@@ -1,6 +1,6 @@
 <template>
   <div id="admin-homepage">
-      <button id="banButton" v-on:click="showForm = true">ban movie</button>
+      <button id="banButton" v-on:click="showForm = true" v-if="!showForm">ban movie</button>
       <form v-if="showForm" v-on:submit.prevent="banMovie(movieIdToBan)">
         <div>
         <label for="movieToBan">movie id: </label>
@@ -13,13 +13,10 @@
         />
         <button id="submitToBan" type="submit">submit movie to ban</button>
       </div>
+      <br/>
       </form>
-<<<<<<< HEAD
       <!--<button>Modify Accounts</button>-->
-=======
-      
->>>>>>> ca50048923e104ad743828272984fef6893e105f
-      <loading class="loading" v-if="isLoading"/>
+      <loading id="loader" class="loading" v-if="isLoading"/>
   </div>
 </template>
 
@@ -61,6 +58,10 @@ export default {
 
 <style>
 
+#loader {
+  width: 60%;
+}
+
 #banButton {
   background-color: #f67280; font-size: larger; 
       color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
@@ -75,7 +76,7 @@ export default {
 #submitToBan{
   background-color: #f67280; font-size: larger; 
       color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
-      line-height: 11px; padding: 16px 23px; position: relative; text-decoration: none;  
+      line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;  
       box-shadow: 3px 3px #f8b195;
       padding: 0.25em 0.5em;
       user-select: none; touch-action: manipulation;
