@@ -15,17 +15,21 @@
       </div>
       </form>
       <button>Modify Accounts</button>
+      <loading class="loading" v-if="isLoading"/>
   </div>
 </template>
 
 <script>
 import movieService from '../services/MovieService';
+import loading from '../components/Loading';
 
 export default {
+  components: { loading },
   data() {
     return {
       showForm: false,
-      movieIdToBan: ""
+      movieIdToBan: "",
+      isLoading: true
     }
   },
   methods: {

@@ -3,7 +3,7 @@
     <form class="form-register" @submit.prevent="register">
       <h1 class="h3 mb-3 font-weight-normal">Create Account</h1>
       
-      <table>
+      <table id="createAccountTable">
         <tbody>
           <tr>
             <td>
@@ -32,7 +32,7 @@
               </tr>
             <tr>
               <td>
-                <label for="password" class="sr-only">Password</label>
+                <label for="password" class="sr-only">password: </label>
                 </td>
                 <td> 
                     <input
@@ -47,7 +47,7 @@
               </tr>
               <tr>
                 <td>
-                <label for="confirmPassword" class="sr-only">confirm password: </label>
+                
                 </td>
                 <td>
                   <div class="alert alert-danger" id ="passwordMsg" role="alert" v-if="passwordErrors">
@@ -56,7 +56,7 @@
                 </tr>
               <tr>
                 <td>
-                  <label for="confirmPassword" class="sr-only">Confirm Password</label>
+                  <label for="confirmPassword" class="sr-only">confirm password: </label>
                 </td>
                 <td>
                   <input
@@ -192,6 +192,10 @@ export default {
   box-shadow: 0px 0px 0px 0px;
   top: 5px;
   left: 5px;
+}
+
+#createAcccountTable{
+  border: none;
 }
 
 

@@ -1,10 +1,12 @@
 <template>
   <div class="account-details" >
-    <h1>Account Details</h1>
+    <h1>{{ currentUser.username }}'s account</h1>
+    <loading class="loading" v-if="isLoading"/>
     <div id="user-account">
-      <h3>Username: {{ currentUser.username }}</h3>
-      <h3>{{ currentUser.role === 'user' ? 'Favorite' : 'Banned' }} Movies: </h3>
+      <!-- <h3>Username: {{ currentUser.username }}</h3> -->
+      <h3>{{ currentUser.role === 'user' ? '' : 'Banned Movies' }}  </h3>
        <div id="movie-details" v-if="moviesToView">
+         <!--
         <table>
           <tr>
             <th>Title</th>
@@ -24,24 +26,69 @@
             <td>{{ GenreNames(movie.genreIds) }}</td>
           </tr>
         </table>
+        -->
+        <ul id="accountMovieCard" v-for="movie in moviesToView" v-bind:key='movie.movieid'>
+          <li id="accountMoviePoster" v-if="currentUser.role === 'user' "> <img class="poster" v-if="movie.posterPath" v-bind:src="'https://image.tmdb.org/t/p/original' + movie.posterPath" /></li>
+          <li id="accountMovieTitle">{{ movie.title }}</li>
+          <li id="accountMovieId">ID: {{ movie.movieId }}</li>
+          <li id="accountMovieGenre"> {{ GenreNames(movie.genreIds) }}</li>
+          </ul>
        </div>
+    </div>
+    <div> 
+    <button v-on:click="DeleteActiveUser">Delete Account</button>
     </div>
   </div>
 </template>
 
 <script>
-//import userService from "../services/UserService";
+import userService from "../services/UserService";
 import movieService from "../services/MovieService";
+import loading from '../components/Loading';
 export default {
-
+components: { loading },
   data() {
     return{
       currentUser: this.$store.state.user,
-      moviesToView: false
+      moviesToView: false,
+      isLoading: false
     } 
   },
 
   methods: {
+    getActiveUser() {
+      this.isLoading = true;
+      userService.getUser(this.$store.state.user.userId).then(response => {
+        this.currentUser = response.data;
+        this.isLoading = false;
+
+        if (response.status === 200 && response.data != null) {
+          /* maybe send them somewhere? */
+        } else {
+          alert("Account not found, please attempt to sign in again.")
+          /*this.$router.push(`/${name: login}`); */
+        }
+      });
+      
+    },
+      /* Delete Account Attempt  */
+      DeleteActiveUser() {
+      const verification = confirm("Are you sure you want to delete your account? Press OK to proceed.")
+      if(verification){
+              this.isLoading = true;
+      userService.deleteUser(this.$store.state.user.userId).then(response => {        if (response.status === 204) {
+          /* maybe send them somewhere? */
+          alert("Account deleted successfully")
+          this.$store.commit("LOGOUT")
+          this.$router.push({ name: "login"})
+        } else {
+          alert("Account not found, please attempt to sign in again.")
+          /*this.$router.push(`/${name: login}`); */
+        }
+       });
+
+      }
+    },
     GenreNames(genreString) {
       const containedGenreIds = genreString.split('|');
       const allGenreList = this.$store.state.genres
@@ -76,14 +123,50 @@ export default {
 <style>
 
 .poster {
-  width:15%;
-  height: 20%;
+  width: 75%;
+  height: 90%;
   margin: auto;
+  display: block;
 }
 
-th, td {
-  border: 1px solid black;
+
+#accountMovieTitle{
+  color: #f67280;
+  font-size: 25px;
   text-align: center;
-  vertical-align: middle;
+  
+  
 }
+#accountMovieGenre{
+  color: #f8b195;
+  text-align: center;
+}
+#accountMovieId{
+  color: #f8b195;
+  text-align: center;
+}
+#movie-details{
+  display: grid;
+  grid-template-columns: 1fr, 1fr, 1fr;
+  gap: 50px;
+  
+  justify-items: center;
+  margin-right: 10px;
+  grid-template-areas:
+  "movie movie movie"
+}
+
+ul{
+  grid-area: "movie"
+}
+
+@media screen and (max-width: 768px){
+  #movie-details{
+    grid-template-areas:
+    "movie";
+    grid-template-columns: 1fr;
+  }
+  
+}
+
 </style>

@@ -28,7 +28,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet("{userId}")]
-        public ActionResult<Account> GetAccountById(int userId)
+        public ActionResult<ReturnUser> GetAccountById(int userId)
         {
             ReturnUser returnUser = null;
 
@@ -41,6 +41,24 @@ namespace Capstone.Controllers
             else
             {
                 return Ok(returnUser);
+            }
+        }
+
+        [HttpDelete("{userId}")]
+        public ActionResult DeleteAccountById(int userId)
+        {
+            userDao.DeleteUser(userId);
+
+            ReturnUser returnUser = null;
+            returnUser = userDao.GetReturnUser(userId);
+
+            if (returnUser == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound("Account does not exist");
             }
         }
 

@@ -10,6 +10,7 @@ namespace Capstone.DAO
         User UpdatePassword(RegisterUser user);
         public ReturnUser GetReturnUser(int userId);
 
+        void DeleteUser(int userId);
         //public RegisterUser GetRegisterUser(string username);
 
 

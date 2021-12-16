@@ -3,13 +3,15 @@
       <!-- this might be its own component, ChooseGenres -->
       <div id="topStuff">
         <h2>choose the genres you would like to browse</h2>
-        <form class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
-          <ul class="genres">
-            <li v-for="genre in genres" v-bind:key='genre.id'>
-              <input v-bind:name='genre.name' type='checkbox' v-bind:value='genre.id' v-model='selected_genre_ids' />
-              <label v-bind:for='genre.name'>{{ genre.name }}</label>
-            </li>
-          </ul>
+        <button id="selectGenres" v-if="!showForm" v-on:click="ToggleForm">Select Genres</button>
+        <loading class="loading" v-if="isLoading"/>
+        <form v-if="!isLoading" class="genre-form" v-on:submit.prevent='GetRandomMovie()'>
+          <div v-show="showForm">
+            <label for="genres">Choose the genres you would like to browse</label><br/>
+            <select name="genres" v-model='selected_genre_objects' multiple>
+              <option v-for="genre in genres" v-bind:key='genre.id' v-bind:value='genre.id'>{{genre.name}}</option>
+            </select><br/>
+          </div>
           <button id='findMoviesRandom' v-if="!suggestedMovie" type="submit">find a movie!</button>
         </form>
       </div>
@@ -50,41 +52,65 @@
 <script>
 import movieService from '../services/MovieService';
 import userService from '../services/UserService';
-import { Vue2InteractDraggable } from 'vue2-interact'
+import { Vue2InteractDraggable } from 'vue2-interact';
+import loading from '../components/Loading';
 
 export default {
 
-  components: { Vue2InteractDraggable },
+  components: { Vue2InteractDraggable, loading },
 
   data() {
     return {
       genres: [],
-      selected_genre_ids: [],
+      selected_genre_objects: [],
       suggestedMovie: false,
       currentUser: false,
-      isVisible: true
-      //test: document.getElementById("card").cloneNode(true)
+      isVisible: true,
+      sameGenres: false,
+      isLoading: true,
+      showForm: false
     }
   },
   created() {
     // call the genres service? or maybe its movie service? to find the available genres
     // and then loop through them to give options
     this.genres = this.$store.state.genres;
+    this.isLoading = false;
   },
   computed: {
     queryString() {
-      if (this.selected_genre_ids.length == 0)
+      if (this.selected_genre_objects.length == 0)
       {
         return '*';
 
       } else {
-        return this.selected_genre_ids.join('|');
+        return this.selected_genre_objects.join('|');
       }
       
-    }
+    },
+    /*
+    queryString() {
+      let genreIds = []
+      this.selected_genre_objects.forEach(element => {
+        genreIds.push(element) 
+      })
+      if (genreIds == []){
+        return "*";
+      } else {
+      return genreIds.join('|');
+      }
+    },*/
+    genreNames() {
+      let genreNames = []
+      this.genres.forEach(element => {
+        genreNames.push(element.name)
+      })
+      return genreNames
+    },
   },
   methods: {
     GetRandomMovie(){
+      this.isLoading= true;
       movieService.getRandomMovie(this.queryString + "/users/" + this.$store.state.user.userId).then( response => {
         this.suggestedMovie = response.data;
         setTimeout(() => this.isVisible = false, 200)
@@ -92,10 +118,12 @@ export default {
 
         this.isVisible = true
       }, 200);
+        this.isLoading= false; 
     }).catch ( error => {
       //ERROR HANDLING
       console.log('Something messed up 2: ' + error)
-    });    
+    });
+    this.showForm = false;    
     },
 
     SaveToExcluded(opinionType){
@@ -117,8 +145,12 @@ export default {
         userService.saveToExcluded(this.$store.state.user.userId, movieInfo);
         this.GetRandomMovie();
       },
-
-         GenreNames(genreArray) {
+      
+      ToggleForm() {
+        this.showForm = !this.showForm;
+      },
+      
+      GenreNames(genreArray) {
         const allGenreList = this.$store.state.genres
         let containedGenreNames = '';
         genreArray.forEach( cId => {
@@ -150,11 +182,8 @@ export default {
         this.SaveToExcluded("Favorite")
 
       },
-
   }
 }
- 
-
     
 </script>
 
@@ -175,7 +204,35 @@ img {
   height: 70%;
 }
 
-#findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft {
+.loading {
+  display: flex;
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  
+
+
+  
+}
+#movieTitle{
+  color: #f67280;
+  
+}
+#homepagePoster{
+  width: 30%;
+  height: 50%;
+}
+#releaseDate{
+  color: #f67280;
+}
+#movieOverview{
+  color: #f8b195;
+}
+
+#findMoviesRandom, #swipeUp, #swipeRight, #swipeLeft, #selectGenres {
   background-color: #f67280; font-size: larger; 
   color: #355c7d; border: 1px solid #266DB6; box-sizing: border-box; font-weight: 700;
   line-height: 24px; padding: 16px 23px; position: relative; text-decoration: none;
@@ -216,8 +273,14 @@ img {
   line-height: 40px;
   margin:auto; 
   text-align:center;
-
 }
+
+#selectGenres:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
 
 .arrow-top:before{
   position: absolute;
